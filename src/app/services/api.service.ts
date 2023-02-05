@@ -21,7 +21,7 @@ export class ApiService {
     return this.http.post(url,body);
   }
   CustomerSignUp(body){
-    let url='https://ecommerce-kxhu.onrender.com/Customer/loginCustomer';
+    let url='https://ecommerce-kxhu.onrender.com/Customer/customerSignup';
     return this.http.post(url,body);
   }
   CustomerUpdateLogin(body){
