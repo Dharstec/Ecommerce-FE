@@ -2,15 +2,16 @@
     <h3>Login</h3>
     <div class="form-name mb-2">
         <label>Email ID</label>
-        <input [(ngModel)]="emailId" placeholder="" autocomplete="off" class="form-control" type="email" id="email-id">  
+        <input [(ngModel)]="emailId" placeholder="" (keyup)="errorMessage=false" autocomplete="off" class="form-control" type="email" id="email-id">  
     </div>
     <div class="form-name mb-2">
         <label>Password</label>
-        <input [(ngModel)]="passcode" placeholder="" autocomplete="off" class="form-control" type="password" id="password">  
+        <input [(ngModel)]="passcode" placeholder="" (keyup)="errorMessage=false"  autocomplete="off" class="form-control" type="password" id="password">  
     </div>
-    <div *ngIf="errorMessage">
-        <label class="border-danger">{{loginData}}</label>
+    <div class="alert alert-danger" role="alert"  *ngIf="errorMessage">
+        {{loginData}}
     </div>
+    <!-- <label class="border-danger">{{loginData}}</label> -->
     <label class="cursor-pointer mb-2" (click)="showForgot=true">
         Forgot your password?
     </label>

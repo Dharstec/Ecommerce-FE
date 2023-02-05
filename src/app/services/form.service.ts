@@ -18,12 +18,6 @@ export class FormService {
           colour:[null],
           for:[null],
           sortBy:[null],
-          // categoryArray:this.formBuilder.array([]),
-          // stoneArray:this.formBuilder.array([]),
-          // styleArray:this.formBuilder.array([]),
-          // colourArray:this.formBuilder.array([]),
-          // forArray:this.formBuilder.array([]),
-          // sortByArray:this.formBuilder.array([[this.addSortArray(data?.sortByDropdownList)]]),
           minPrice:[null],
           maxPrice:[null],
         })
@@ -38,6 +32,21 @@ export class FormService {
           phoneNo:[data && data.phoneNumber ? data.phoneNumber : null,[Validators.required,Validators.maxLength(10),Validators.pattern(this.numberRegEx)]],
           emailId:[data && data.email ? data.email : null,[Validators.required,Validators.email]],
           passcode:[data && data.password ? data.password : null,[Validators.required]],
+        })
+        return tempForm;
+      }
+      case 'customerAddress':{
+        let tempForm = this.formBuilder.group({
+          firstName:[data && data.firstName ? data.firstName : null,[Validators.required]],
+          lastName:[data && data.lastName ? data.lastName : null,[Validators.required]],
+          phoneNo:[data && data.phoneNumber ? data.phoneNumber : null,[Validators.required,Validators.maxLength(10),Validators.pattern(this.numberRegEx)]],
+          emailId:[data && data.email ? data.email : null,[Validators.required,Validators.email]],
+          countryName:[data && data.countryName ? data.countryName : null,[Validators.required]],
+          cityName:[data && data.cityName ? data.cityName : null,[Validators.required]],
+          stateName:[data && data.stateName ? data.stateName : null,[Validators.required]],
+          pinCode:[data && data.pinCode ? data.pinCode : null,[Validators.required]],
+          address:[data && data.address ? data.address : null,[Validators.required]],
+          saveInfo:[data && data.saveInfo ? data.saveInfo : null],
         })
         return tempForm;
       }

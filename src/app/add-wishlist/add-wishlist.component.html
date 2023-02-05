@@ -8,17 +8,17 @@
                             <tbody>
                                 <ng-container *ngFor="let row of wishListData;index as i">
                                     <tr class="cursor-pointer border-bottom">
-                                        <td class="w-25 text-left"><img class="" style="width:35%" [src]="row.productImage" alt=""></td>
+                                        <td class="w-25 text-left"><img class="" style="width:35%" [src]="row.data.productImage" alt=""></td>
                                         <td class="text-left">
                                             <div class="mb-3">
-                                                {{row?.productName}}
+                                                {{row?.data?.productName}}
                                             </div>
                                         </td>
                                         <td class="text-lg-right font-color">
-                                            <div class="text-priceOriginal mb-1">{{row?.discountPrice | currency:'INR'}}</div>
-                                            <div class="mb-1"><s>{{row?.actualPrice | currency:'INR'}}</s></div>
+                                            <div class="text-priceOriginal mb-1">{{row?.data?.discountPrice | currency:'INR'}}</div>
+                                            <div class="mb-1"><s>{{row?.data?.actualPrice | currency:'INR'}}</s></div>
                                            <button class="btn btn-secondary mr-3" (click)="deleteProduct(row)">Remove Wishlist</button>
-                                           <button class="btn btn-secondary" (click)="addToCart(row)">Add to Cart</button>
+                                           <button class="btn btn-secondary" (click)="addToCart(row.data)">Add to Cart</button>
                                         </td>
                                     </tr>
                                 </ng-container>

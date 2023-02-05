@@ -28,10 +28,25 @@ export class ProductDetailsComponent implements OnInit {
   async ngOnInit(): Promise<void>  {
     this.currentProductDetails=history.state.data
     console.log(history.state)
-    this.currentUserData=this.util.getCurrentUserData()
-    this.cartList=this.util.getCartData()
-    this.wishList=this.util.getWishlistData()
-    await this.getAllProduct()
+    let userData = this.util.getObservable().subscribe((res) => {
+      if(res.currentUserData && res.currentUserData){
+        this.currentUserData = res.currentUserData
+        this.wishList=res.addWishlistCount ? res.addWishlistCount : []
+        this.cartList=res.addCartlistCount ? res.addCartlistCount : []
+        this.wishList.forEach(e=>{
+          this.addToWishlist=this.currentProductDetails.productId==e?._id && !this.addToWishlist ? true : false
+        })
+      }else{
+        this.wishList=res.addWishlistCount || []
+        this.cartList=res.addCartlistCount || []
+        this.wishList.forEach(e=>{
+          this.addToWishlist=this.currentProductDetails.productId==e?._id && !this.addToWishlist? true : false
+        }) 
+      }
+  
+    });
+
+    // await this.getAllProduct()
     // $('.product-details').animate({scrollTop:0});
   }
   subMenuOpen(id){
@@ -40,13 +55,13 @@ export class ProductDetailsComponent implements OnInit {
 
   addToCart(){
     if(this.currentUserData){
-      let existCart=this.currentUserData.data.cartProductDetails
-      if(existCart.length){
-        existCart.forEach(e=>{
+      // this.cartList=this.currentUserData.cartProductDetails || []
+      if(this.cartList.length){
+        this.cartList.forEach(e=>{
           if(e.productId==this.currentProductDetails.productId){
              e['quantity']+=1
           }else{
-            existCart.push({
+            this.cartList.push({
               "productId":   this.currentProductDetails.productId,
               "quantity": 1,
               "_id":   this.currentProductDetails.productId
@@ -54,14 +69,17 @@ export class ProductDetailsComponent implements OnInit {
           }
         })
       }else{
-        existCart.push({
+        this.cartList.push({
           "productId":   this.currentProductDetails.productId,
           "quantity": 1,
           "_id":   this.currentProductDetails.productId
       })
       }
-      existCart=this.util.unique(existCart,['_id'])
-      this.util.setCurrentUserData(this.currentUserData)
+      this.cartList=this.util.unique(this.cartList,['_id'])
+      this.currentUserData.cartProductDetails=this.cartList
+      this.cartList.map(e=>e.productId==this.currentProductDetails.productId ? e['data']=this.currentProductDetails : false)
+      this.util.setObservable('addCartlistCount',this.cartList)
+      // this.util.setObservable('currentUserData',this.currentUserData)
     }else{
       if(this.cartList.length){
         this.cartList.forEach(e=>{
@@ -83,9 +101,8 @@ export class ProductDetailsComponent implements OnInit {
       })
       }
       this.cartList=this.util.unique(this.cartList,['_id'])
-      this.util.setObservable('addCartListCount',this.cartList/length)
     }
-  
+    this.util.setObservable('addCartlistCount',this.cartList)
     this.router.navigate(['/jewel/cart'])
   }
 
@@ -95,36 +112,28 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   async addWishlist(){
+    // this.addToWishlist=!this.addToWishlist
+    if(this.currentUserData){
+      // this.wishList=this.currentUserData.cartProductDetails || []
 
-    //orignal func
-    this.addToWishlist=!this.addToWishlist
-    if(this.addToWishlist){
-      if(this.currentUserData){
-        let existWishList=this.currentUserData.data.wishlistProductIdDetails
-        if(existWishList.length){
-          existWishList.forEach(e=>{
-            this.productList.forEach(x=>{
-              x['wishList']= e==x.productId || e==this.currentProductDetails.productId && !x['wishList'] ? true :false
-            })
-          })
-        }else{
-          this.productList.forEach(x=>{
-            x['wishList']=false
-          })
-        }
-        this.util.setObservable('currentUserData',this.currentUserData)
-      }else{
-        this.productList.forEach(x=>{
-          x['wishList']= this.currentProductDetails.productId==x.productId && !x['wishList'] ? true :false
-        })
-      }
-  
-    }else{
-      this.productList.forEach(x=>{
-        x['wishList']= this.currentProductDetails.productId==x.productId && !x['wishList'] ? true :null
+      this.wishList.push({
+          "_id":   this.currentProductDetails.productId,
+          "data": this.currentProductDetails,
       })
+      this.wishList=this.util.unique( this.wishList,['_id'])
+      let formatedWish= this.wishList.map(e=>e._id)
+      this.currentUserData.wishlistProductIdDetails=formatedWish
+      this.util.setObservable('addWishlistCount',this.wishList)
+      // this.util.setObservable('currentUserData',this.currentUserData)
+    }else{
+      this.wishList.push({
+        "_id":   this.currentProductDetails.productId,
+        "data": this.currentProductDetails,
+    })
+
+      this.wishList=this.util.unique(this.wishList,['_id'])
+      this.util.setObservable('addWishlistCount',this.wishList)
     }
-    this.util.setObservable('',this.productList)
     this.router.navigate(['/jewel/add-to-wishlist'])
   }
 

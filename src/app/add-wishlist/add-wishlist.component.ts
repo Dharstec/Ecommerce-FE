@@ -19,76 +19,134 @@ export class AddWishlistComponent implements OnInit {
     {Name:'30 Day Easy Returns'},
     {Name:'Free Shipping'}
   ]
-  cartList: any=[];
+  cartListData: any=[];
 
   constructor(private api:ApiService,private router:Router,private util:UtilService) { }
 
   ngOnInit(): void {
-    this.currentUserData=this.util.getCurrentUserData()
-    let data=this.util.getWishlistData()
-    this.wishListData=[]
-    data.forEach(e=>{
-      e.wishList ? this.wishListData.push(e) : null
-    })
+    let userData = this.util.getObservable().subscribe((res) => {
+      if(res.currentUserData && res.currentUserData.data){
+        this.currentUserData = res.currentUserData.data
+        this.wishListData=res.addWishlistCount //this.currentUserData.wishlistProductIdDetails ? this.currentUserData.wishlistProductIdDetails : []
+        this.cartListData=res.addCartlistCount//this.currentUserData.cartProductDetails ? this.currentUserData.cartProductDetails : []
+      }else{
+        this.wishListData=res.addWishlistCount || []
+        this.cartListData=res.addCartlistCount || []
+      } 
+      console.log("Current user data",this.currentUserData)
+      console.log("Wishlist product",this.wishListData)
+    });
   }
 
 
   deleteProduct(list){
     let index=this.wishListData.findIndex(e=>e.productId==list.productId)
     this.wishListData.splice(index,1)
+    this.util.setObservable('addWishlistCount',this.wishListData)
   }
 
   addToCart(row){
     if(this.currentUserData){
-      let existCart=this.currentUserData.data.cartProductDetails
-      if(existCart.length){
-        existCart.forEach(e=>{
+      // this.cartList=this.currentUserData.cartProductDetails || []
+      if(this.cartListData.length){
+        this.cartListData.forEach(e=>{
           if(e.productId==row.productId){
              e['quantity']+=1
           }else{
-            existCart.push({
+            this.cartListData.push({
               "productId":   row.productId,
-              "quantity": 1,
-              "_id":  row.productId
-          })
-          }
-        })
-      }else{
-        existCart.push({
-          "productId":   row.productId,
-          "quantity": 1,
-          "_id":   row.productId
-      })
-      }
-      existCart=this.util.unique(existCart,['_id'])
-      this.util.setCurrentUserData(this.currentUserData)
-    }else{
-      if(this.cartList.length){
-        this.cartList.forEach(e=>{
-          if(e.productId==row.productId){
-             e['quantity']+=1
-          }else{
-           return this.cartList.push({
-              "data": row,
               "quantity": 1,
               "_id":   row.productId
           })
           }
         })
       }else{
-        this.cartList.push({
-          "data":row,
+        this.cartListData.push({
+          "productId":  row.productId,
+          "quantity": 1,
+          "_id":  row.productId
+      })
+      }
+      this.cartListData=this.util.unique(this.cartListData,['_id'])
+      this.currentUserData.cartProductDetails=this.cartListData
+      this.cartListData.map(e=>e.productId==row.productId ? e['data']=row : false)
+      this.util.setObservable('addCartlistCount',this.cartListData)
+      // this.util.setObservable('currentUserData',this.currentUserData)
+    }else{
+      if(this.cartListData.length){
+        this.cartListData.forEach(e=>{
+          if(e.productId==row.productId){
+             e['quantity']+=1
+          }else{
+           return this.cartListData.push({
+              "data":row,
+              "quantity": 1,
+              "_id":  row.productId
+          })
+          }
+        })
+      }else{
+        this.cartListData.push({
+          "data": row,
           "quantity": 1,
           "_id": row.productId
       })
       }
-      this.cartList=this.util.unique(this.cartList,['_id'])
-      this.util.setCartData(this.cartList)
+      this.cartListData=this.util.unique(this.cartListData,['_id'])
     }
-  
+    this.util.setObservable('addCartlistCount',this.cartListData)
     this.router.navigate(['/jewel/cart'])
   }
 
-
+  // addToCart(row){
+  //   if(this.currentUserData){
+  //     let existCart=this.currentUserData.cartProductDetails || []
+  //     if(existCart.length){
+  //       existCart.forEach(e=>{
+  //         if(e.productId==row.productId){
+  //            e['quantity']+=1
+  //         }else{
+  //           existCart.push({
+  //             "productId":   row.productId,
+  //             "quantity": 1,
+  //             "_id":   row.productId
+  //         })
+  //         }
+  //       })
+  //     }else{
+  //       existCart.push({
+  //         "productId":  row.productId,
+  //         "quantity": 1,
+  //         "_id":   row.productId
+  //     })
+  //     }
+  //     existCart=this.util.unique(existCart,['_id'])
+  //     this.util.setObservable('currentUserData',this.currentUserData)
+  //   }else{
+  //     if(this.cartListData.length){
+  //       this.cartListData.forEach(e=>{
+  //         if(e.productId==row.productId){
+  //            e['quantity']+=1
+  //         }else{
+  //          return this.cartListData.push({
+  //             "data": row,
+  //             "quantity": 1,
+  //             "_id":  row.productId
+  //         })
+  //         }
+  //       })
+  //     }else{
+  //       this.cartListData.push({
+  //         "data": row,
+  //         "quantity": 1,
+  //         "_id": row.productId
+  //     })
+  //     }
+  //     this.cartListData=this.util.unique(this.cartListData,['_id'])
+  //     this.util.setObservable('addCartlistCount',this.cartListData)
+  //   }
+  
+  //   this.router.navigate(['/jewel/cart'])
+  // }
 
 }

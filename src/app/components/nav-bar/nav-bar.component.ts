@@ -27,19 +27,26 @@ export class NavBarComponent implements OnInit {
   styleDropdownList: any;
   forDropdownList: any;
   sortByDropdownList: any;
+  userData: any;
   
   constructor(private api:ApiService,private router:Router,private util:UtilService,private changeDetectorRefs: ChangeDetectorRef,private zone:NgZone) {
    }
 
   ngOnInit(): void {
-    this.userLogin=true
-    // this.util.getCurrentUserData().subscribe((data) => {
-    //   this.zone.run(() => {
-    //     this.userLogin= data ? true :false
-    //     console.log('enabled time travel');
-    // });
-    //   // this.changeDetectorRefs.detectChanges();
-    //  })
+    this.userData = this.util.getObservable().subscribe((res) => {
+      if(res.currentUserData && res.currentUserData.data){
+        let data = res.currentUserData.data
+        this.wishListCount=res.addWishlistCount ? res.addWishlistCount.length : 0
+        this.cartListCount=res.addCartlistCount ? res.addCartlistCount.length : 0
+        this.userLogin=true
+      }else{
+        this.userLogin=false
+        this.wishListCount=res.addWishlistCount ? res.addWishlistCount.length : 0
+        this.cartListCount=res.addCartlistCount ? res.addCartlistCount.length : 0
+      }
+    });
+
+
     this.categoryDropdownList =this.util.getStatic('categoryDropdown');
     this.stoneDropdownList = this.util.getStatic('stoneDropdown') ;
     this.colourDropdownList = this.util.getStatic('colourDropdown');
@@ -85,7 +92,8 @@ export class NavBarComponent implements OnInit {
   }
 
   logOut(){
-       this.util.setCurrentUserData('')
+       let data=[]
+       this.util.setObservable('currentUserData',data)
        this.userLogin=false
   }
 

@@ -34,14 +34,17 @@ export class LoginComponent implements OnInit {
         if(data.status){
           this.loginData=data
           this.errorMessage=false
-          await this.util.setCurrentUserData(data)
+          await this.util.setObservable('currentUserData',data)
           this.router.navigate(['/jewel/product-collections'])
         }else{
           this.errorMessage=true
           this.loginData=data.message
         }
         console.log(data)
-      })
+      }, err => {
+        this.errorMessage=true
+        this.loginData=err.error.message
+      });
     }else{
       let body={
         "email": this.emailId
@@ -51,6 +54,9 @@ export class LoginComponent implements OnInit {
           this.showVerifyOtp=true
         }
         console.log(data)
+      }, err => {
+        // this.errorMessage=true
+        // this.loginData=err.error.message
       })
     }
 

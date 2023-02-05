@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { UtilService } from '../services/util.service';
@@ -19,38 +20,97 @@ export class CartComponent implements OnInit {
     {Name:'30 Day Easy Returns'},
     {Name:'Free Shipping'}
   ]
+  cartForm: any;
 
 
-  constructor(private api:ApiService,private router:Router,private util:UtilService) { }
+  constructor(private api:ApiService,private router:Router,private util:UtilService, private fb:FormBuilder) { }
 
   ngOnInit(): void {
-    this.currentUserData=this.util.getCurrentUserData()
-    this.cartListData=this.util.getCartData()
-
+    this.cartForm = this.fb.group({
+      quantityArray: this.fb.array([this.addQuantityFormArray('')]),
+    })
+    let userData = this.util.getObservable().subscribe((res) => {
+      if(res.currentUserData && res.currentUserData.data){
+        this.currentUserData = res.currentUserData.data
+        // this.wishList=this.currentUserData.wishlistProductIdDetails ? this.currentUserData.wishlistProductIdDetails.length : []
+        this.cartListData=res.addCartlistCount //this.currentUserData.cartProductDetails ? this.currentUserData.cartProductDetails : []
+      }else{
+        // this.wishList=res.addWishlistCount || []
+        this.cartListData=res.addCartlistCount || []
+      } 
+    });
+    this.cartListData.forEach(e=>{
+      this.cartList.push(this.addQuantityFormArray(e))
+    })
+    this.cartList.controls.splice(0, 1);
+    this.setTotalPrice()
+  }
+  get cartList() {
+    return this.cartForm.get('quantityArray') as FormArray;
+  }
+  addQuantityFormArray(data){
+    let tempForm = this.fb.group({
+      data :[data ? data.data : null],
+      value :[data ? data.quantity : null],
+      giftWrap:[false],
+    })
+    return tempForm;
+  }
+  
+  itemPlus(row){
+    let val=row.get('value').value
+    let data=row.get('data').value
+    val +=1
+    this.setQuantity(val,data,'click')
+  }
+  itemMinus(row){
+    let val=row.get('value').value
+    let data=row.get('data').value
+    val <= 1 ?   val = 1 : val -=1
+    this.setQuantity(val,data,'click')
+  }
+  // updateCartList(row){
+  //   this.cartListData.map(e=>{
+  //     if(e.productId==data.productId){
+  //       e['quantity']=val
+  //     }
+  //   })
+  // }
+  setQuantity(event,data,type?:any){
+    let val= type =='click' ?    event  : event.target.value
+    this.cartListData.map((e,i)=>{
+      if(e._id==data.productId){
+        this.cartList.at(i).get('value').setValue(val)  //push(this.addQuantityFormArray(e))
+        e['quantity']=Number(val)
+      }
+    })
+    console.log('',this.cartListData)
+    this.setTotalPrice()
+  }
+  setTotalPrice(){
     let val=0
     this.cartListData.forEach(e=>{
-      val+= e.data.discountPrice
+      val = val + (e.quantity*e.data.discountPrice) 
     })
     this.totalAmt=val
   }
-  itemPlus(){
-    this.productCount +=1
-  }
-  itemMinus(){
-    this.productCount <= 1 ?   this.productCount = 1 : this.productCount -=1
-  }
-  setQuantity(event,data){
-    let val=event.target.value
-    this.cartListData.map(e=>{
-      if(e.productId==data.productId){
-        e['quantity']=val
+  setGiftWrap(event,tanch){
+    let check= event.target.checked
+    let data=tanch.get('data').value
+    this.cartListData.map((e,i)=>{
+      if(e._id==data.productId){
+        this.cartList.at(i).get('giftWrap').setValue(check) 
+        e.data['gift']=check
       }
     })
   }
 
   deleteProduct(list){
-    let index=this.cartListData.findIndex(e=>e.productId==list.productId)
+    let index=this.cartListData.findIndex(e=>e.productId==list.get('data').value.productId)
     this.cartListData.splice(index,1)
+    this.cartList.controls.splice(index, 1);
+    this.util.setObservable('addCartlistCount',this.cartListData)
+    this.setTotalPrice()
   }
   routeToNext(){
     this.router.navigate(['/jewel/customer-address'])

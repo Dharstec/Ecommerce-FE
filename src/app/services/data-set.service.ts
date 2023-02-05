@@ -11,7 +11,7 @@ export class DataSetService {
     currentUserData: null,
     isApplicationLoaded: null,
     refreshNotification: null,
-    currentMgtSubMenu: null, //Used in management current resource
+    userData: null,
     currentFiltered:null, // Used in all dasboards filter
     addWishlistCount:null, // Used in all dasboards filter
     addCartlistCount:null,

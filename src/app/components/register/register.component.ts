@@ -71,6 +71,8 @@ export class RegisterComponent implements OnInit {
       }else if(data.message=='Already Use These Email'){
         this.showResendOtp=true
       }else this.showErrorMsg=true
+    },err=>{
+      this.showErrorMsg=true
     })
   }
   resendOtp(){
@@ -83,6 +85,8 @@ export class RegisterComponent implements OnInit {
       if(data.status==1){
         this.showVerifyOtp=true
       }
+    },err=>{
+
     })
   }
 
