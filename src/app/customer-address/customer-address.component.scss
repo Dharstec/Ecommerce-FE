@@ -17,6 +17,13 @@
         text-align: initial;
         margin-top: 1rem;
     }
+    .shipping_details{
+        padding: 12px;
+        border:1px solid #f0f4f8;
+        font-size: 12px;
+        // margin-left: 24px;
+        border-radius: 2px;
+    }
 
 }
 
@@ -30,3 +37,31 @@
     margin-left: 24px;
 
 }
+.tags{  
+    list-style: none;
+    display: table;
+    width: 100%;
+    margin: 8px 0;
+    padding: 5px;
+    table-layout: fixed;
+    li{
+        padding: 5px 1.2px;
+        color: #949494;
+        text-align: center;
+        font-style: normal;
+        cursor: pointer;
+        display: table-cell;
+    }
+    .product-policies{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        img{
+            width: 55px;
+            margin-bottom: 10px;
+            vertical-align: sub;
+        }
+    }
+}
+

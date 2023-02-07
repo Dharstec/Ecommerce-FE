@@ -1,13 +1,13 @@
 <div class="main-content">
     <div>
         <div class="flex-custom">
-            <form [formGroup]="detailsForm">
+            <form [formGroup]="detailsForm" style="width: 50%;">
                 <div class="mb-3">
                     <span class="stepper">Cart<img class="stepperImg" src="assets/left-arrow.svg" alt=""></span>
                     <span class="stepper">Information<img class="stepperImg" src="assets/left-arrow.svg"alt=""></span>
                     <span class="stepper">Payment</span>
     
-                    <div class="customer_details">
+                    <div class="customer_details" *ngIf="!paymentPage">
                         <h2 class="mb-4">Contact information</h2>
                         <div class="form-name mb-2">
                             <label>Email ID</label>
@@ -54,15 +54,87 @@
                             <input type="checkbox" id="saveInfo" formControlName="saveInfo" class="mr-3 mb-1" autocomplete="off">
                             <label for="saveInfo">	Save this information for next time</label>
                         </div>
-                        <div class="flex-custom">
+                        <div class="flex-custom mb-4">
                             <div class="mb-2 mr-auto">
                                 <button class="btn btn-secondary mr-2"  routerLink="/jewel/cart" >Return to Cart</button>
                             </div>
                             <div class="mb-2">
-                                <button class="btn btn-secondary mr-2" >Continue to Payment</button>
+                                <button class="btn btn-dark mr-2" (click)="paymentPage=true" >Continue to Payment</button>
                             </div>
                         </div>
+                           <!-- static policy content -->
+                        <!-- <div class="flex-custom mb-3">
+                        <ng-container *ngFor="let policy of productPolicies">
+                                <ul class="tags">
+                                    <li>
+                                        <div class="product-policies">
+                                            <img class="" [src]="policy.img" alt="">
+                                            <p>{{policy?.Name}}</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                        </ng-container>
+                        </div> -->
                     </div>
+                    <div *ngIf="paymentPage">
+                        <div class="shipping_details mb-4">
+                            <table class="table mb-3">
+                                    <tbody>
+                                        <tr class="border-bottom">
+                                            <td class="border-0">Contact</td>
+                                            <td class="border-0">{{detailsForm.get('emailId').value}}</td>
+                                            <td class="border-0">Change</td>
+                                        </tr>
+                                        <tr class="border-bottom">
+                                            <td class="">Ship to</td>
+                                            <td class="">{{detailsForm.get('emailId').value}}</td>
+                                            <td class="">Change</td>
+                                        </tr>
+                                        <tr class="border-bottom">
+                                            <td class="">Method</td>
+                                            <td class="">Standard shipping (Free) · Free</td>
+                                            <td class=""></td>
+                                        </tr>
+                                    </tbody>
+                            </table>
+
+                        </div>
+                        <div class="text-left mb-4">
+                            <div>Payment</div>
+                            <label>All transactions are secure and encrypted.</label>
+                        </div>
+                        <div class="shipping_details mb-4">
+                            <table class="table mb-3">
+                                    <tbody>
+                                        <tr class="border-bottom">
+                                            <td class="border-0">Contact</td>
+                                            <td class="border-0">{{detailsForm.get('emailId').value}}</td>
+                                            <td class="border-0">Change</td>
+                                        </tr>
+                                        <tr class="border-bottom">
+                                            <td class="">Ship to</td>
+                                            <td class="">{{detailsForm.get('emailId').value}}</td>
+                                            <td class="">Change</td>
+                                        </tr>
+                                        <tr class="border-bottom">
+                                            <td class="">Method</td>
+                                            <td class="">Standard shipping (Free) · Free</td>
+                                            <td class=""></td>
+                                        </tr>
+                                    </tbody>
+                            </table>
+
+                        </div>
+                        <div class="flex-custom mb-4">
+                            <div class="mb-2 mr-auto">
+                                <button class="btn btn-secondary mr-2"  (click)="paymentPage=false" >Return to Shipping</button>
+                            </div>
+                            <div class="mb-2">
+                                <button class="btn btn-dark mr-2">Place Order</button>
+                            </div>
+                        </div>    
+                    </div>
+
                 </div>
             </form>
         

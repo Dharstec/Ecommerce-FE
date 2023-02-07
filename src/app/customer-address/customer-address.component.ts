@@ -12,6 +12,13 @@ export class CustomerAddressComponent implements OnInit {
   cartListData: any;
   detailsForm: any;
   totalAmt: number;
+  paymentPage:any
+  productPolicies=[
+    {img:'assets/lifetime_service.webp',Name:'Lifetime Plating Service'},
+    {img:'assets/warranty.png',Name:'6 Month Warranty'},
+    {img:'assets/returns.avif',Name:'30 Day Easy Returns'},
+    {img:'assets/free_shipping.webp',Name:'Free Shipping'}
+  ]
 
   constructor(private api:ApiService,private router:Router,private util:UtilService) { }
 

@@ -38,7 +38,7 @@
                 <input type="text" formControlName="minPrice" [(ngModel)]="minValue" class="priceRange" autocomplete="off" (keyUp)="changePrice($event,'min')"> -
                 <input type="text" formControlName="maxPrice" [(ngModel)]="maxValue" class="priceRange" autocomplete="off" (keyUp)="changePrice($event,'max')">
               </div>
-              <ngx-slider [options]="slideOptions" [(value)]="minValue" [(highValue)]="maxValue"></ngx-slider>
+              <ngx-slider [options]="slideOptions" (userChange)="filterByPrice($event,'price')" [(value)]="minValue" [(highValue)]="maxValue"></ngx-slider>
             </div>
           </div>
         <!-- Colour filter list -->

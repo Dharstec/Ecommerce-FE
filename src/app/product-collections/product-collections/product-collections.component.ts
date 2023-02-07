@@ -169,7 +169,7 @@ export class ProductCollectionsComponent implements OnInit {
       itemsShowLimit: 1,
     };
   }
-  async getFilterData(event,data,type?:any){
+  async getFilterData(event,data?:any,type?:any){
     let checked = type!='remove' ? event.target.checked :false
     data.checked = checked ? true:false
     let prevType;
@@ -277,6 +277,9 @@ export class ProductCollectionsComponent implements OnInit {
   
     // if(!this.selectedFilterList.length){
       this.allProductList.forEach(async e=>{
+        if(type=='price' && e.discountPrice){
+
+        }
         e.category.map(x=>{
           this.categoryDropdownList.forEach(y=>{
             if(y.item_id.toLowerCase()==x.toLowerCase() && y.checked){
@@ -371,6 +374,25 @@ export class ProductCollectionsComponent implements OnInit {
   }else this.productList=this.allProductList
   prevType=type
   // await this.getFilterData()
+  }
+
+  filterByPrice(event,type?:any){
+    let temp = []
+    // if(this.productList.length){
+    //   this.productList.forEach(e=>{
+    //     if(event.value<=e.discountPrice && e.discountPrice<=event.highValue){
+    //       temp.push(e)
+    //     }
+    //   })
+    // }else{
+      this.allProductList.forEach(e=>{
+        if(event.value<=e.discountPrice && e.discountPrice<=event.highValue){
+          temp.push(e)
+        }
+      })
+    // }
+    this.productList=temp
+
   }
   getSortByFilter(data,id){
     this.sortByFilter=data?.field_name.toUpperCase()
