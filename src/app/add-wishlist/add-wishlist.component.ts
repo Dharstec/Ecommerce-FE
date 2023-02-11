@@ -50,38 +50,38 @@ export class AddWishlistComponent implements OnInit {
       // this.cartList=this.currentUserData.cartProductDetails || []
       if(this.cartListData.length){
         this.cartListData.forEach(e=>{
-          if(e.productId==row.productId){
+          if(e.productId==row._id){
              e['quantity']+=1
           }else{
             this.cartListData.push({
-              "productId":   row.productId,
+              "productId":   row._id,
               "quantity": 1,
-              "_id":   row.productId
+              "_id":   row._id
           })
           }
         })
       }else{
         this.cartListData.push({
-          "productId":  row.productId,
+          "productId":  row._id,
           "quantity": 1,
-          "_id":  row.productId
+          "_id":  row._id
       })
       }
       this.cartListData=this.util.unique(this.cartListData,['_id'])
       this.currentUserData.cartProductDetails=this.cartListData
-      this.cartListData.map(e=>e.productId==row.productId ? e['data']=row : false)
+      this.cartListData.map(e=>e.productId==row._id ? e['data']=row : false)
       this.util.setObservable('addCartlistCount',this.cartListData)
       // this.util.setObservable('currentUserData',this.currentUserData)
     }else{
       if(this.cartListData.length){
         this.cartListData.forEach(e=>{
-          if(e.productId==row.productId){
+          if(e.productId==row._id){
              e['quantity']+=1
           }else{
            return this.cartListData.push({
               "data":row,
               "quantity": 1,
-              "_id":  row.productId
+              "_id":  row._id
           })
           }
         })
@@ -89,7 +89,7 @@ export class AddWishlistComponent implements OnInit {
         this.cartListData.push({
           "data": row,
           "quantity": 1,
-          "_id": row.productId
+          "_id": row._id
       })
       }
       this.cartListData=this.util.unique(this.cartListData,['_id'])

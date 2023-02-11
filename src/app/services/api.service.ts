@@ -40,4 +40,9 @@ export class ApiService {
     let url=`https://ecommerce-kxhu.onrender.com/Customer/resetPassword`;
     return this.http.post(url,body);
   }
+  //order
+  createorder(body){
+    let url=`https://ecommerce-kxhu.onrender.com/Order/createOrder`;
+    return this.http.post(url,body);
+  }
 }

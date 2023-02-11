@@ -103,23 +103,43 @@
                             <div>Payment</div>
                             <label>All transactions are secure and encrypted.</label>
                         </div>
-                        <div class="shipping_details mb-4">
+                        <div class="shipping_details mb-4" style="text-align: initial;">
                             <table class="table mb-3">
                                     <tbody>
                                         <tr class="border-bottom">
-                                            <td class="border-0">Contact</td>
-                                            <td class="border-0">{{detailsForm.get('emailId').value}}</td>
-                                            <td class="border-0">Change</td>
+                                            <td class="border-0"><input type="radio" id="cashFree" name="payment" class="mr-2" value="cashFree" checked>
+                                                <label for="cashFree">Payment</label> </td>
                                         </tr>
                                         <tr class="border-bottom">
-                                            <td class="">Ship to</td>
-                                            <td class="">{{detailsForm.get('emailId').value}}</td>
-                                            <td class="">Change</td>
+                                            <td class="border-0"><input type="radio" id="razorPay" name="payment" class="mr-2" value="razorPay">
+                                                <label for="razorPay">Razorpay Secure (UPI, Cards, Wallets, NetBanking)</label></td>
                                         </tr>
                                         <tr class="border-bottom">
-                                            <td class="">Method</td>
-                                            <td class="">Standard shipping (Free) · Free</td>
-                                            <td class=""></td>
+                                            <td class="border-0"><input type="radio" id="cod" name="payment" class="mr-2" value="cod" >
+                                                <label for="cod">Cash on Delivery</label></td>
+                                        </tr>
+                                    </tbody>
+                            </table>
+
+                        </div>
+                        <div class="text-left mb-4">
+                            <div>Billing address</div>
+                            <label>Select the address that matches your card or payment method.</label>
+                        </div>
+                        <div class="shipping_details mb-4" style="text-align: initial;">
+                            <table class="table mb-3">
+                                    <tbody>
+                                        <tr class="border-bottom">
+                                            <td class="border-0"><input type="radio" id="same" name="billAddress" class="mr-2" value="cashFree" checked>
+                                            <label for="same">
+                                                Same as shipping address
+                                            </label></td>
+                                        </tr>
+                                        <tr class="border-bottom">
+                                            <td class="border-0"><input type="radio" name="payment" id="billAddress" class="mr-2" value="razorPay" >
+                                                <label for="different">
+                                                    Use a different billing address
+                                                </label></td>
                                         </tr>
                                     </tbody>
                             </table>
@@ -130,7 +150,7 @@
                                 <button class="btn btn-secondary mr-2"  (click)="paymentPage=false" >Return to Shipping</button>
                             </div>
                             <div class="mb-2">
-                                <button class="btn btn-dark mr-2">Place Order</button>
+                                <button class="btn btn-dark mr-2" (click)="updateOrder()">Place Order</button>
                             </div>
                         </div>    
                     </div>
@@ -146,8 +166,8 @@
                             <tr class="">
                                 <td class="w-16"><img class="w-100" [src]='row.data.productImage'></td>
                                 <td class="">{{row.data.productName}}</td>
-                                <td class="">{{row.quantity}}</td>
-                                <td class="text-right">{{row.quantity * row.data.discountPrice}}</td>
+                                <td class="">Quan-{{row.quantity}}</td>
+                                <td class="text-right">{{row.quantity * row.data.discountPrice | currency:'INR'}}</td>
                             </tr>
                         </tbody>
                     </ng-container>
@@ -180,9 +200,6 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- <div class="">
-                    <button class="btn btn-dark">Checkout Securely</button>
-                </div> -->
 
                </div>
         </div>

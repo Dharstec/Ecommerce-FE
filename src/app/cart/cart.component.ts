@@ -79,7 +79,7 @@ export class CartComponent implements OnInit {
   setQuantity(event,data,type?:any){
     let val= type =='click' ?    event  : event.target.value
     this.cartListData.map((e,i)=>{
-      if(e._id==data.productId){
+      if(e._id==data._id){
         this.cartList.at(i).get('value').setValue(val)  //push(this.addQuantityFormArray(e))
         e['quantity']=Number(val)
       }
@@ -98,7 +98,7 @@ export class CartComponent implements OnInit {
     let check= event.target.checked
     let data=tanch.get('data').value
     this.cartListData.map((e,i)=>{
-      if(e._id==data.productId){
+      if(e._id==data._id){
         this.cartList.at(i).get('giftWrap').setValue(check) 
         e.data['gift']=check
       }
@@ -106,7 +106,7 @@ export class CartComponent implements OnInit {
   }
 
   deleteProduct(list){
-    let index=this.cartListData.findIndex(e=>e.productId==list.get('data').value.productId)
+    let index=this.cartListData.findIndex(e=>e.productId==list.get('data').value._id)
     this.cartListData.splice(index,1)
     this.cartList.controls.splice(index, 1);
     this.util.setObservable('addCartlistCount',this.cartListData)

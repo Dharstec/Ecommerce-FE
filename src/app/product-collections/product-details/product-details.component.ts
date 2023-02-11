@@ -53,43 +53,43 @@ export class ProductDetailsComponent implements OnInit {
     $('#' + id).toggleClass('open').siblings().slideToggle(300);
   }
 
-  addToCart(){
+  async addToCart(){
     if(this.currentUserData){
       // this.cartList=this.currentUserData.cartProductDetails || []
       if(this.cartList.length){
         this.cartList.forEach(e=>{
-          if(e.productId==this.currentProductDetails.productId){
+          if(e.productId==this.currentProductDetails._id){
              e['quantity']+=1
           }else{
             this.cartList.push({
-              "productId":   this.currentProductDetails.productId,
+              "productId":   this.currentProductDetails._id,
               "quantity": 1,
-              "_id":   this.currentProductDetails.productId
+              "_id":   this.currentProductDetails._id
           })
           }
         })
       }else{
         this.cartList.push({
-          "productId":   this.currentProductDetails.productId,
+          "productId":   this.currentProductDetails._id,
           "quantity": 1,
-          "_id":   this.currentProductDetails.productId
+          "_id":   this.currentProductDetails._id
       })
       }
       this.cartList=this.util.unique(this.cartList,['_id'])
       this.currentUserData.cartProductDetails=this.cartList
-      this.cartList.map(e=>e.productId==this.currentProductDetails.productId ? e['data']=this.currentProductDetails : false)
+      this.cartList.map(e=>e.productId==this.currentProductDetails._id ? e['data']=this.currentProductDetails : false)
       this.util.setObservable('addCartlistCount',this.cartList)
-      // this.util.setObservable('currentUserData',this.currentUserData)
+      // await this.updateCustomer()
     }else{
       if(this.cartList.length){
         this.cartList.forEach(e=>{
-          if(e.productId==this.currentProductDetails.productId){
+          if(e.productId==this.currentProductDetails._id){
              e['quantity']+=1
           }else{
            return this.cartList.push({
               "data": this.currentProductDetails,
               "quantity": 1,
-              "_id":   this.currentProductDetails.productId
+              "_id":   this.currentProductDetails._id
           })
           }
         })
@@ -97,7 +97,7 @@ export class ProductDetailsComponent implements OnInit {
         this.cartList.push({
           "data": this.currentProductDetails,
           "quantity": 1,
-          "_id":   this.currentProductDetails.productId
+          "_id":   this.currentProductDetails._id
       })
       }
       this.cartList=this.util.unique(this.cartList,['_id'])
@@ -143,6 +143,20 @@ export class ProductDetailsComponent implements OnInit {
       this.productList=data
       this.productList=this.productList.data
       this.productList.forEach(e=> e['wishList']=false)
+    })
+  }
+
+  updateCustomer(){
+    console.log(this.currentUserData)
+    this.currentUserData.cartProductDetails.map(e=>{
+      delete e.data
+      delete e._id
+    })
+    this.currentUserData.data['cartProductDetails']=this.currentUserData['cartProductDetails']
+    let body=this.currentUserData.data
+    return this.api.CustomerUpdateLogin(body).subscribe(async data=>{
+      console.log(data)
+    // this.util.setObservable('currentUserData',data)
     })
   }
 
