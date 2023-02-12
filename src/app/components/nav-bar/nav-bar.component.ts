@@ -45,6 +45,15 @@ export class NavBarComponent implements OnInit {
         this.cartListCount=res.addCartlistCount ? res.addCartlistCount.length : 0
       }
     });
+    let result =localStorage.getItem('user_data');
+      let data;
+      if(result){
+        let val=JSON.parse(result)
+        data=val?.data
+        this.util.setObservable('currentUserData',data) 
+        this.userLogin=true
+      }else this.userLogin=false
+
 
 
     this.categoryDropdownList =this.util.getStatic('categoryDropdown');
@@ -53,13 +62,7 @@ export class NavBarComponent implements OnInit {
     this.styleDropdownList = this.util.getStatic('styleDropdown') ;
     this.forDropdownList = this.util.getStatic('forDropdown') ;
     this.sortByDropdownList = this.util.getStatic('sortByDropdown') ;
-  //   this._subscription = this.util.getCartData().subscribe((value) => {
-  //     let temp=0
-  //     value.forEach(e=>{
-  //       temp+=e.quantity
-  //     })
-  //     this.cartListCount = temp
-  // })
+
     this.activeNavBar='collections'
   }
   // ngAfterViewInit(){
@@ -87,13 +90,14 @@ export class NavBarComponent implements OnInit {
   loginPage(){
     if(!this.userLogin){
       this.activeNavBar=''
-      return this.router.navigate(['/jewel/login'])
+      return this.router.navigate(['/jewel/login']) 
     }else return
   }
 
   logOut(){
-       let data=[]
+       let data={}
        this.util.setObservable('currentUserData',data)
+       localStorage.removeItem('user_data')
        this.userLogin=false
   }
 

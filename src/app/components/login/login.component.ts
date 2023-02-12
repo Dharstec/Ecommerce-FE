@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit {
           this.loginData=data
           this.errorMessage=false
           await this.util.setObservable('currentUserData',data)
+          localStorage.setItem('user_data',JSON.stringify(this.loginData.data))
           this.router.navigate(['/jewel/product-collections'])
         }else{
           this.errorMessage=true

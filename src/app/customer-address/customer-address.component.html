@@ -59,7 +59,7 @@
                                 <button class="btn btn-secondary mr-2"  routerLink="/jewel/cart" >Return to Cart</button>
                             </div>
                             <div class="mb-2">
-                                <button class="btn btn-dark mr-2" (click)="paymentPage=true" >Continue to Payment</button>
+                                <button class="btn btn-dark mr-2" (click)="paymentPage=true" [class.disabled]="detailsForm.invalid">Continue to Payment</button>
                             </div>
                         </div>
                            <!-- static policy content -->
@@ -76,19 +76,19 @@
                         </ng-container>
                         </div> -->
                     </div>
-                    <div *ngIf="paymentPage">
+                    <div class="mt-5" *ngIf="paymentPage">
                         <div class="shipping_details mb-4">
                             <table class="table mb-3">
                                     <tbody>
                                         <tr class="border-bottom">
                                             <td class="border-0">Contact</td>
                                             <td class="border-0">{{detailsForm.get('emailId').value}}</td>
-                                            <td class="border-0">Change</td>
+                                            <td class="border-0 blue-text" (click)="paymentPage=false">Change</td>
                                         </tr>
                                         <tr class="border-bottom">
                                             <td class="">Ship to</td>
-                                            <td class="">{{detailsForm.get('emailId').value}}</td>
-                                            <td class="">Change</td>
+                                            <td class="">{{detailsForm.get('address').value}}</td>
+                                            <td class="blue-text" (click)="paymentPage=false">Change</td>
                                         </tr>
                                         <tr class="border-bottom">
                                             <td class="">Method</td>
@@ -136,7 +136,7 @@
                                             </label></td>
                                         </tr>
                                         <tr class="border-bottom">
-                                            <td class="border-0"><input type="radio" name="payment" id="billAddress" class="mr-2" value="razorPay" >
+                                            <td class="border-0"><input type="radio" name="billAddress" id="different" class="mr-2" value="razorPay" >
                                                 <label for="different">
                                                     Use a different billing address
                                                 </label></td>
@@ -166,7 +166,7 @@
                             <tr class="">
                                 <td class="w-16"><img class="w-100" [src]='row.data.productImage'></td>
                                 <td class="">{{row.data.productName}}</td>
-                                <td class="">Quan-{{row.quantity}}</td>
+                                <td class="">Qua- {{row.quantity}}</td>
                                 <td class="text-right">{{row.quantity * row.data.discountPrice | currency:'INR'}}</td>
                             </tr>
                         </tbody>
@@ -176,7 +176,7 @@
                     <input placeholder="Discount code/Voucher code" autocomplete="off" class="form-control" type="text" id="Voucher">
                     <button class="ml-12 btn btn-dark">Apply</button>
                 </div>
-                <div class="form-name mb-4">
+                <div class="form-name" style="margin-bottom: 310px;">
                     <label>Redeem GIVA Gift Card</label>
                     <div class="flex-custom">
                         <input placeholder="Enter Gift card No." autocomplete="off" class="form-control mr-12" type="text" id="giftcard">

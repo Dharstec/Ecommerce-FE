@@ -62,12 +62,15 @@
        
         <div class="nav-bar-icons flex-custom">
           <span><img class="nav-icon" (click)="toggleSearchBar()" src="assets/search.svg" alt=""></span>
-          <span class="dropdown" (click)="loginPage()"><img class="nav-icon"  src="assets/profile.svg" alt="">
-            <div class="dropdown-content" *ngIf="userLogin" style="right:0;top:24px;left:auto;">
-              <a href="/jewel/login-security" (click)="activeNavBar=''" >Login & Security</a>
-              <a href="/jewel/order-details" (click)="activeNavBar=''" >Your Orders</a>
-              <a href="/jewel/customer-address" (click)="activeNavBar=''" >Your Addresses</a>
-              <a (click)="logOut()">Log out</a>
+          <span class="dropdown"><img class="nav-icon"  src="assets/profile.svg" alt="">
+            <div class="dropdown-content" *ngIf="!userLogin" style="right:0;top:24px;left:auto;">
+              <a (click)="loginPage()"><img class="d-arrow mr-12" src="assets/login/login.svg" alt="">Log in</a>
+            </div>
+            <div class="dropdown-content login_drp" *ngIf="userLogin" >
+              <a href="/jewel/login-security" (click)="activeNavBar=''" ><img class="d-arrow mr-12" src="assets/login/security.svg" alt="">Login & Security</a>
+              <a href="/jewel/order-details" (click)="activeNavBar=''" ><img class="d-arrow mr-12" src="assets/login/order.svg" alt="">Your Orders</a>
+              <a href="/jewel/customer-address" (click)="activeNavBar=''" ><img class="d-arrow mr-12" src="assets/login/address.svg" alt="">Your Addresses</a>
+              <a (click)="logOut()"><img class="d-arrow mr-12" src="assets/login/logout.svg" alt="">Log out</a>
             </div>
           </span>
           <div routerLink="/jewel/add-to-wishlist" (click)="activeNavBar=''">
