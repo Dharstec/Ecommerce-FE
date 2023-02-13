@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { UtilService } from 'src/app/services/util.service';
 
@@ -21,11 +21,12 @@ export class ProductDetailsComponent implements OnInit {
   wishList: any=[];
   addToWishlist: boolean=false;
   productList: any;
-  constructor(private api:ApiService,private router:Router,private util:UtilService) {
+  constructor(private api:ApiService,private router:Router,private activeRoute:ActivatedRoute,private util:UtilService) {
     
    }
 
   async ngOnInit(): Promise<void>  {
+    // this.activeRoute.queryParams.subscribe(e=>e.state)
     this.currentProductDetails=history.state.data
     console.log(history.state)
     let userData = this.util.getObservable().subscribe((res) => {
