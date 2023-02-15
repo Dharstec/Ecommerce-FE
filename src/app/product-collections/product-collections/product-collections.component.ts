@@ -67,7 +67,10 @@ export class ProductCollectionsComponent implements OnInit {
       this.productList=data
       this.productList=this.productList.data
       this.allProductList=this.productList
-      this.spinner.hide()
+     setTimeout(() => {
+        this.spinner.hide();
+    }, 1000);
+
       await this.getFilterDropDownData()
       // this.spinner.hide();
     })
