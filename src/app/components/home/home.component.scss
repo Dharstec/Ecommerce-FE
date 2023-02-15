@@ -26,3 +26,37 @@
         }
     }
 }
+
+.heart{
+    width: 30px;
+    height: 30px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.accordion{
+    //  border: 1px solid black;
+        // padding: 0px 12px;
+    .accordion_img{
+        border: 1px solid #000;
+        width: 200px;
+        height: 220px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .product-name{
+        text-align: center;
+        font-size: 16px;
+        width: 224px;
+        cursor: pointer;
+        // display: flex;
+        // flex-wrap: wrap;
+    }
+    .product-price{
+        text-align: center;
+        font-size: 16px;
+        cursor: pointer;
+        // display: flex;
+        // flex-wrap: wrap;
+    }
+}

@@ -7,6 +7,10 @@ import { CommonModule, TitleCasePipe } from '@angular/common';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 // import { AngularMaterialModule}  from './angular-material/angular-material/angular-material.module'
+//
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -60,6 +64,9 @@ import { AddWishlistComponent } from './add-wishlist/add-wishlist.component';
     FormsModule,
     ReactiveFormsModule,
     // AngularMaterialModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    NgxSpinnerModule
  
   ],
   providers: [

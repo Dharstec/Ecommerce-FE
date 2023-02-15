@@ -7,6 +7,7 @@ import { FormBuilder,FormArray, FormGroup, Validators, AbstractControl } from '@
 import { UtilService} from 'src/app/services/util.service';
 import * as $ from 'jquery';
 import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 
@@ -24,7 +25,7 @@ export class ProductCollectionsComponent implements OnInit {
   styleDropdownList:any;
   forDropdownList:any;
   sortByDropdownList:any;
-  dropdownSettings:IDropdownSettings={};
+  // dropdownSettings:IDropdownSettings={};
 
   minValue: number = 0;
   maxValue: number = 10000;
@@ -46,7 +47,7 @@ export class ProductCollectionsComponent implements OnInit {
   elementPosition: any;
   prevId:any;
 
-  constructor(private util:UtilService,private api:ApiService,private router:Router,private fb:FormBuilder) {
+  constructor(private util:UtilService,private api:ApiService,private router:Router,private fb:FormBuilder,private spinner:NgxSpinnerService) {
    }
    @HostListener('window:scroll', ['$event'])
    handleScroll(){
@@ -58,18 +59,21 @@ export class ProductCollectionsComponent implements OnInit {
        }
    }
   async ngOnInit(): Promise<void> {
-    console.log(history.state)
     this.filterForm= this.util.getForm('productFilter')
     this.sortByFilter='FEATURED'
+    this.spinner.show()
     this.api.getProductData().subscribe(async data=>{
       console.log(data)
       this.productList=data
       this.productList=this.productList.data
       this.allProductList=this.productList
+      this.spinner.hide()
       await this.getFilterDropDownData()
+      // this.spinner.hide();
     })
-    let data=history.state.row
-    console.log(data)
+    
+    // let data=history.state.row
+    // console.log(data)
     // this.api.getLoginData().subscribe(async data=>{
     //   console.log(data)
     // })
@@ -161,13 +165,14 @@ export class ProductCollectionsComponent implements OnInit {
         })
          e['field_name']=`${e.item_text} (${e.count})`
       })
-     return this.dropdownSettings = {
-      idField: 'item_id',
-      textField: 'field_name',
-      enableCheckAll: false,
-      allowSearchFilter: true,
-      itemsShowLimit: 1,
-    };
+ 
+    //  return this.dropdownSettings = {
+    //   idField: 'item_id',
+    //   textField: 'field_name',
+    //   enableCheckAll: false,
+    //   allowSearchFilter: true,
+    //   itemsShowLimit: 1,
+    // };
   }
   async getFilterData(event,data?:any,type?:any){
     let checked = type!='remove' ? event.target.checked :false
@@ -466,6 +471,8 @@ export class ProductCollectionsComponent implements OnInit {
       let productName=data.productName.replace(/\s/g,'-')
       let url=`/jewel/product-collections/details/${productName}`
       return this.router.navigate([url],{state : {data}})
+
+      // return this.router.navigate([url],{queryParams:{productDetails:{...data}},  skipLocationChange: true})
   }
   
 

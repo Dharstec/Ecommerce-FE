@@ -1,5 +1,67 @@
 <div class="main-content">
-    <div class="collection_images">
+    <div class="collection_images mb-4">
       <img class="img-container" src="assets/homeImg/home.svg" alt="">
     </div>
+    <div class="collection_images mb-4">
+      <img class="img-container" src="assets/homeImg/Lifetime_Plating.svg" alt="">
+    </div>
+    <!-- category -->
+    <h3 class="text-center font-weight-bolder"><img class="heart" src="assets/homeImg/heart-64.png">Shop By Category<img class="heart" src="assets/homeImg/heart-64.png"></h3>
+    <div class="flex-custom overflow-auto w-100 mb-4">
+     
+      <div class="accordion mb-4" *ngFor="let row of listByCategory;let i=index">
+        <div class="flex-grid cursor-pointer" >
+           <img class="accordion_img" [src]="row?.data?.productImage" alt="">
+           <label class="product-name mt-1">{{row?.category | titlecase}}</label>
+           <div class="product-price">
+            <!-- <label class="mr-12">{{row?.discountPrice | currency:'INR'}}</label> -->
+            <!-- <s class="grey-text">{{row?.actualPrice | currency:'INR'}}</s> -->
+           </div>
+        </div>
+     </div>
+    </div>
+     <!-- gift -->
+     <h3 class="text-center font-weight-bolder"><img class="heart" src="assets/homeImg/heart-64.png">Most Gifted<img class="heart" src="assets/homeImg/heart-64.png"></h3>
+     <div class="flex-custom overflow-auto w-100 mb-4">
+      <div class="accordion mb-4" *ngFor="let row of giftProducts;let i=index">
+        <div class="flex-grid cursor-pointer" >
+           <img class="accordion_img" [src]="row?.productImage" alt="">
+           <label class="product-name mt-1">{{row?.productName | titlecase}}</label>
+           <div class="product-price">
+            <label class="mr-12">{{row?.discountPrice | currency:'INR'}}</label>
+            <div><s class="grey-text">{{row?.actualPrice | currency:'INR'}}</s></div>
+           </div>
+           
+        </div>
+     </div>
+    </div>
+     <!-- colour -->
+     <h3 class="text-center font-weight-bolder"><img class="heart" src="assets/homeImg/heart-64.png">Shop By Colour<img class="heart" src="assets/homeImg/heart-64.png"></h3>
+     <div class="flex-custom overflow-auto w-100 mb-4">
+      <div class="accordion mb-4  ml-auto mr-auto" *ngFor="let row of listByColour;let i=index">
+        <div class="flex-grid cursor-pointer" >
+           <img class="accordion_img" [src]="row?.data?.productImage" alt="">
+           <label class="product-name mt-1">{{row?.colour | titlecase}}</label>
+           <div class="product-price">
+            <!-- <label class="mr-12">{{row?.discountPrice | currency:'INR'}}</label> -->
+            <!-- <s class="grey-text">{{row?.actualPrice | currency:'INR'}}</s> -->
+           </div>
+        </div>
+     </div>
+    </div>
+     <!-- essential -->
+     <h3 class="text-center font-weight-bolder"><img class="heart" src="assets/homeImg/heart-64.png">Essentials For You<img class="heart" src="assets/homeImg/heart-64.png"></h3>
+     <div class="flex-custom overflow-auto w-100 mb-4">
+      <div class="accordion mb-4 ml-auto mr-auto" *ngFor="let row of listByStyle;let i=index">
+        <div class="flex-grid cursor-pointer ml-12 mr-12" >
+           <img class="accordion_img" style="border-radius: 50%;width: 300px;height: 320px;" [src]="row?.data?.productImage" alt="">
+           <label class="product-name w-100 mt-1">{{row?.style | titlecase}} Wear</label>
+           <div class="product-price">
+            <!-- <label class="mr-12">{{row?.discountPrice | currency:'INR'}}</label> -->
+            <!-- <s class="grey-text">{{row?.actualPrice | currency:'INR'}}</s> -->
+           </div>
+        </div>
+     </div>
+    </div>
+   
 </div>

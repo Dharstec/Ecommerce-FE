@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { UtilService } from 'src/app/services/util.service';
@@ -21,14 +22,16 @@ export class ProductDetailsComponent implements OnInit {
   wishList: any=[];
   addToWishlist: boolean=false;
   productList: any;
-  constructor(private api:ApiService,private router:Router,private activeRoute:ActivatedRoute,private util:UtilService) {
+  constructor(private api:ApiService,private router:Router,private activeRoute:ActivatedRoute,private util:UtilService,private snackBar:MatSnackBar) {
     
    }
 
   async ngOnInit(): Promise<void>  {
-    // this.activeRoute.queryParams.subscribe(e=>e.state)
-    this.currentProductDetails=history.state.data
-    console.log(history.state)
+   this.currentProductDetails=history.state.data
+    // let param= this.activeRoute.queryParamMap.subscribe(e=>{
+    //   this.currentProductDetails=e['productDetails']
+    // }) 
+    console.log( this.currentProductDetails)
     let userData = this.util.getObservable().subscribe((res) => {
       if(res.currentUserData && res.currentUserData){
         this.currentUserData = res.currentUserData
@@ -104,6 +107,7 @@ export class ProductDetailsComponent implements OnInit {
       this.cartList=this.util.unique(this.cartList,['_id'])
     }
     this.util.setObservable('addCartlistCount',this.cartList)
+    this.currentUserData ? this.updateCustomer() :false
     this.router.navigate(['/jewel/cart'])
   }
 
@@ -135,6 +139,9 @@ export class ProductDetailsComponent implements OnInit {
       this.wishList=this.util.unique(this.wishList,['_id'])
       this.util.setObservable('addWishlistCount',this.wishList)
     }
+    let snackBarRef = this.snackBar.open("Wishlist updated successfully",'Close',{
+      duration:5000
+    });
     this.router.navigate(['/jewel/add-to-wishlist'])
   }
 
@@ -151,11 +158,14 @@ export class ProductDetailsComponent implements OnInit {
     console.log(this.currentUserData)
     this.currentUserData.cartProductDetails.map(e=>{
       delete e.data
-      delete e._id
+      delete e.productId //e._id
     })
     this.currentUserData.data['cartProductDetails']=this.currentUserData['cartProductDetails']
     let body=this.currentUserData.data
     return this.api.CustomerUpdateLogin(body).subscribe(async data=>{
+      let snackBarRef = this.snackBar.open("Added to cart successfully",'Close',{
+        duration:5000
+      });
       console.log(data)
     // this.util.setObservable('currentUserData',data)
     })

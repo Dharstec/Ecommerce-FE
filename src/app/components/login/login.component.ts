@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { UtilService } from 'src/app/services/util.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
   otp:number
   showChangePassword: boolean;
 
-  constructor(private api:ApiService,private router:Router,private util:UtilService) { }
+  constructor(private api:ApiService,private router:Router,private util:UtilService,private snackBar:MatSnackBar) { }
 
   ngOnInit(): void {
   }
@@ -36,6 +37,9 @@ export class LoginComponent implements OnInit {
           this.errorMessage=false
           await this.util.setObservable('currentUserData',data)
           localStorage.setItem('user_data',JSON.stringify(this.loginData.data))
+          let snackBarRef = this.snackBar.open("Login Successfully",'Close',{
+            duration:5000
+          });
           this.router.navigate(['/jewel/product-collections'])
         }else{
           this.errorMessage=true
