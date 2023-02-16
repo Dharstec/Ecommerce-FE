@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { UtilService } from 'src/app/services/util.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-home',
@@ -17,13 +18,15 @@ export class HomeComponent implements OnInit {
   listByColour: any[];
   listByStyle: any[];
 
-  constructor(private util:UtilService,private api:ApiService,private router:Router,private fb:FormBuilder) { }
+  constructor(private util:UtilService,private api:ApiService,private router:Router,private fb:FormBuilder, private spinner:NgxSpinnerService) { }
 
   ngOnInit(): void {
+    this.spinner.show()
     this.api.getProductData().subscribe(async (data:any)=>{
       console.log(data)
       this.productList=data.data
-      this.getlistByCategory()
+      await this.getlistByCategory()
+      this.spinner.hide()
       // this.productList=this.productList
       // this.allProductList=this.productList
     })

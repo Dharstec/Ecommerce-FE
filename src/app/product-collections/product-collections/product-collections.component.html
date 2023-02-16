@@ -35,7 +35,7 @@
             <div class="filter-id mr-12 mb-12 drop" (click)="subMenuOpen('price')"  id="price">Price</div>
             <div class="dropdown-content" [class.sticky-dropdown] = "sticky">
               <div class="flex-custom mb-3">
-                <input type="text" formControlName="minPrice" [(ngModel)]="minValue" class="priceRange" autocomplete="off" (keyUp)="changePrice($event,'min')"> -
+                <input type="text" formControlName="minPrice" [(ngModel)]="minValue"  class="priceRange" autocomplete="off" (keyUp)="changePrice($event,'min')"> -
                 <input type="text" formControlName="maxPrice" [(ngModel)]="maxValue" class="priceRange" autocomplete="off" (keyUp)="changePrice($event,'max')">
               </div>
               <ngx-slider [options]="slideOptions" (userChange)="filterByPrice($event,'price')" [(value)]="minValue" [(highValue)]="maxValue"></ngx-slider>
@@ -98,7 +98,7 @@
       </div>
     </form>
   </div>
-  <label class="prdt-count"><b>{{productList.length}}</b> Products</label>
+  <label class="prdt-count"><b>{{productList ? productList.length : 0}}</b> Products</label>
     <div class="content-details">
       <div class="accordion mb-4" *ngFor="let row of productList;let i=index">
           <div class="flex-grid cursor-pointer" (click)="routeToDetails(row)">

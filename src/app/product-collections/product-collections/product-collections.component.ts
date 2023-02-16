@@ -18,7 +18,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class ProductCollectionsComponent implements OnInit {
   @ViewChild('stickyMenu') menuElement: ElementRef;
-  productList:any
+  productList:any=[]
   categoryDropdownList:any;
   stoneDropdownList:any;
   colourDropdownList:any;
@@ -59,9 +59,9 @@ export class ProductCollectionsComponent implements OnInit {
        }
    }
   async ngOnInit(): Promise<void> {
+    this.spinner.show()
     this.filterForm= this.util.getForm('productFilter')
     this.sortByFilter='FEATURED'
-    this.spinner.show()
     this.api.getProductData().subscribe(async data=>{
       console.log(data)
       this.productList=data
@@ -69,7 +69,7 @@ export class ProductCollectionsComponent implements OnInit {
       this.allProductList=this.productList
      setTimeout(() => {
         this.spinner.hide();
-    }, 1000);
+    }, 2000);
 
       await this.getFilterDropDownData()
       // this.spinner.hide();
@@ -467,7 +467,7 @@ export class ProductCollectionsComponent implements OnInit {
   }
 
   changePrice(event,type){
-      type=='min' ?   this.minValue=this.filterForm.get('minValue').value :   this.maxValue=this.filterForm.get('maxValue').value
+     type=='min' ?   this.minValue=this.filterForm.get('minValue').value :   this.maxValue=this.filterForm.get('maxValue').value
   }
 
   routeToDetails(data?:any){

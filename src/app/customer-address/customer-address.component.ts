@@ -67,7 +67,7 @@ export class CustomerAddressComponent implements OnInit {
   this.cartListData.map((e,i)=>{
     let name='order'+i
     e['orders'].push({
-      'order1': {
+      name: {
         "produtDetails": e._id,
         "quantity": e.quantity
       }
