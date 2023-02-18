@@ -17,27 +17,31 @@
                                     <ng-container formArrayName="quantityArray" *ngFor="let tanch of cartForm.get('quantityArray')['controls']; let i = index;">
                                         <div [formGroupName]="i">
                                             <tr class="cursor-pointer">
-                                                <td class="w-25 text-left"><img class="" style="width:35%" [src]="tanch.get('data').value.productImage" alt=""></td>
-                                                <td class="text-left">
-                                                    <div class="mb-3">
-                                                        {{tanch.get('data').value.productName}}
-                                                        <!-- {{row?.data?.productName}} -->
+                                                <td class="w-75 text-left flex-custom" style="align-items: center;"><img class="" style="width:10%" [src]="tanch.get('data').value.productImage" alt="">
+                                                    <div class="ml-4">
+                                                        <div class="mb-3">
+                                                            {{tanch.get('data').value.productName}}
+                                                        </div>
+                                                        <div class="bg-clr" id="quantity-list-{{i}}" style="width: 111px;">
+                                                            <span class="btn btn-item" (click)="itemMinus(tanch)">-</span>
+                                                            <input (keyup)="setQuantity($event,tanch.get('data').value)" formControlName="value" type="text" name="Quantity" class="countInput"/>
+                                                            <span class="btn btn-item m-0" (click)="itemPlus(tanch)">+</span>
+                                                        </div>
                                                     </div>
-                                                    <div class="bg-clr" id="quantity-list-{{i}}" style="width: 111px;">
-                                                        <span class="btn btn-item" (click)="itemMinus(tanch)">-</span>
-                                                        <input (keyup)="setQuantity($event,tanch.get('data').value)" formControlName="value" type="text" name="Quantity" class="countInput"/>
-                                                        <span class="btn btn-item m-0" (click)="itemPlus(tanch)">+</span>
-                                                    </div>
+                                                    
+                                                </td>
+                                                <!-- <td class="text-left"> -->
+                                                    
                                                     <!-- <div class="bg-clr" style="width: 111px;">
                                                         <span class="btn btn-item" (click)="itemMinus(row)">-</span>
                                                         <input (keyup)="setQuantity($event,row)" [(ngModel)]="productCount" type="text" name="Quantity" class="countInput"/>
                                                         <span class="btn btn-item m-0" (click)="itemPlus(row)">+</span>
                                                     </div> -->
-                                                </td>
+                                                <!-- </td> -->
                                                 <td class="text-lg-right font-color">
                                                     <div class="text-priceOriginal mb-1">{{tanch.get('data').value?.discountPrice | currency:'INR'}}</div>
                                                     <div class="mb-1"><s>{{tanch.get('data').value?.actualPrice | currency:'INR'}}</s></div>
-                                                    <div><img class="" src="assets/delete.svg" alt="" (click)="deleteProduct(tanch)"></div>
+                                                    <div><img class="" src="assets/delete.svg" alt="" (click)="removeAddCart(tanch)"></div>
                                                 </td>
                                             <!-- </ng-container> -->
                                         </tr>

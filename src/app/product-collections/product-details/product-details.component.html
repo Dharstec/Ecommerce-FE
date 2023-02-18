@@ -38,7 +38,20 @@
             </ng-container>
             </div>
             <div class="btm-line">
+                <!-- <mat-expansion-panel (opened)="panelOpenState = true"
+                (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                        Self aware panel
+                        </mat-panel-title>
+                        <mat-panel-description>
+                        Currently I am {{panelOpenState ? 'open' : 'closed'}}
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <p>{{currentProductDetails?.description}}</p>
+                </mat-expansion-panel> -->
                 <div class="filter-id mr-2 drop font-weight-bolder" (click)="subMenuOpen('specialoffer')"  id="specialoffer">SPECIAL OFFERS</div>
+                <!-- <mat-icon>refresh</mat-icon> -->
                 <div class="dropdown-content mb-3">
                     <div>{{currentProductDetails?.description}}</div>
                 </div>

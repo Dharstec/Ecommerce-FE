@@ -64,4 +64,28 @@
         }
     }
 }
+.coupon-chips{
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    border-radius: 2px;
+    width: 30%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    min-width: 30%;
+    margin-right: 7px;
+    &.active_code{
+        border-color: #FF8EA7 !important;
+        color: #FF8EA7;
+    }
+    &:hover{
+        border-color: #FF8EA7 !important;
+        color: #FF8EA7;
+    }
+}
 

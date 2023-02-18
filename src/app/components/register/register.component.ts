@@ -63,7 +63,7 @@ export class RegisterComponent implements OnInit {
       "orderHistory":null  
     }
 
-    this.api.CustomerSignUp(body).subscribe(async (data:any)=>{
+    this.api.postCall('Customer/customerSignup',body).subscribe(async (data:any)=>{
       console.log(data)
       if(data.status==1){
         this.showVerifyOtp=true
@@ -83,7 +83,7 @@ export class RegisterComponent implements OnInit {
     let body={
       "email":form.emailId,
     }
-    this.api.resendOTP(body).subscribe(async (data:any)=>{
+    this.api.postCall('Customer/resendOtp',body).subscribe(async (data:any)=>{
       console.log(data)
       if(data.status==1){
         this.showVerifyOtp=true
@@ -95,7 +95,8 @@ export class RegisterComponent implements OnInit {
 
   otpVerification(){
     let form=this.registerForm.getRawValue()
-    this.api.verifyOTP(form.otp).subscribe(async (data:any)=>{
+    let url=`Customer/verifyCustomerOtp/${form.otp}`
+    this.api.getCall(url).subscribe(async (data:any)=>{
       if(data.status){
         this.showSuccessMsg=true
         this.router.navigate(['/jewel/product-collections'])

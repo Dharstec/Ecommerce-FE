@@ -17,7 +17,7 @@
                                         <td class="text-lg-right font-color">
                                             <div class="text-priceOriginal mb-1">{{row?.data?.discountPrice | currency:'INR'}}</div>
                                             <div class="mb-1"><s>{{row?.data?.actualPrice | currency:'INR'}}</s></div>
-                                           <button class="btn btn-secondary mr-3" (click)="deleteProduct(row)">Remove Wishlist</button>
+                                           <button class="btn btn-secondary mr-3" (click)="removeWishlist(row)">Remove Wishlist</button>
                                            <button class="btn btn-secondary" (click)="addToCart(row.data)">Add to Cart</button>
                                         </td>
                                     </tr>

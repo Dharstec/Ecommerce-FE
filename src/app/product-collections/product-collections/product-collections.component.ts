@@ -1,5 +1,5 @@
 import { Component, HostListener, Input, OnInit, ViewChild,ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { IDropdownSettings, } from 'ng-multiselect-dropdown';
 import { Options } from '@angular-slider/ngx-slider';
@@ -47,7 +47,7 @@ export class ProductCollectionsComponent implements OnInit {
   elementPosition: any;
   prevId:any;
 
-  constructor(private util:UtilService,private api:ApiService,private router:Router,private fb:FormBuilder,private spinner:NgxSpinnerService) {
+  constructor(private util:UtilService,private api:ApiService,private router:Router,private activeRoute:ActivatedRoute,private fb:FormBuilder,private spinner:NgxSpinnerService) {
    }
    @HostListener('window:scroll', ['$event'])
    handleScroll(){
@@ -59,14 +59,24 @@ export class ProductCollectionsComponent implements OnInit {
        }
    }
   async ngOnInit(): Promise<void> {
+    let type:any =this.activeRoute.queryParams.subscribe(res=>{
+      console.log('ssssssss',res.type)
+      return res.type
+    })
     this.spinner.show()
     this.filterForm= this.util.getForm('productFilter')
     this.sortByFilter='FEATURED'
-    this.api.getProductData().subscribe(async data=>{
+    this.api.getCall('Product/getProduct').subscribe(async data=>{
       console.log(data)
       this.productList=data
       this.productList=this.productList.data
       this.allProductList=this.productList
+      if(type=='gift'){
+        this.productList = this.productList.forEach(e=>{
+          return e.gift ?  e :false
+        })
+        console.log('gift product',this.productList )
+      }
      setTimeout(() => {
         this.spinner.hide();
     }, 2000);

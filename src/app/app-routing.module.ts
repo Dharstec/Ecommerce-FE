@@ -29,7 +29,7 @@ const routes: Routes = [
     { path: 'product-collections', component: ProductCollectionsComponent, data: { title: 'Collections'}},
      { path: 'product-collections/details/:name', component: ProductDetailsComponent, data: { title: 'Details'}},
      { path: 'product-personalised', component: ProductPersonalisedComponent, data: { title: 'Personalised'}},
-     { path: 'product-gifts', component: GiftProductComponent, data: { title: 'Gifts'}},
+     { path: 'product-gifts', component: ProductCollectionsComponent, data: { title: 'Gifts', type:'gift'}},
      { path: 'product-new-arrivals', component: NewArrivalsProductComponent, data: { title: 'New-arrivals'}},
      { path: 'login-security', component: LoginSecurityComponent, data: { title: 'Login-Security'}},
      { path: 'order-details', component: OrderDetailsComponent, data: { title: 'Your-orders'}},

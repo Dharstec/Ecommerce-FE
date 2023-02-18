@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { UtilService } from '../services/util.service';
@@ -23,7 +24,7 @@ export class CartComponent implements OnInit {
   cartForm: any;
 
 
-  constructor(private api:ApiService,private router:Router,private util:UtilService, private fb:FormBuilder) { }
+  constructor(private api:ApiService,private router:Router,private util:UtilService, private fb:FormBuilder,private snackBar:MatSnackBar) { }
 
   ngOnInit(): void {
     this.cartForm = this.fb.group({
@@ -105,12 +106,15 @@ export class CartComponent implements OnInit {
     })
   }
 
-  deleteProduct(list){
+  removeAddCart(list){
     let index=this.cartListData.findIndex(e=>e.productId==list.get('data').value._id)
     this.cartListData.splice(index,1)
     this.cartList.controls.splice(index, 1);
     this.util.setObservable('addCartlistCount',this.cartListData)
     this.setTotalPrice()
+    let snackBarRef = this.snackBar.open("Wishlist removed successfully",'Close',{
+      duration:5000
+    });
   }
   routeToNext(){
     this.router.navigate(['/jewel/customer-address'])

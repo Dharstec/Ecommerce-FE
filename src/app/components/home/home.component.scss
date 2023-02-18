@@ -1,6 +1,6 @@
 .main-content{
-    // top: 125px;
-    // position: relative;
+    top: 125px;
+    position: relative;
     background: #ffffff;
     // background: rgb(227, 228, 219);
     .collection_images{
@@ -43,7 +43,23 @@
         height: 220px;
         margin-left: auto;
         margin-right: auto;
+
+        &.cat_img{
+            border: 1.5px solid #BBBBBB;
+            width: 150px;
+            height: 150px;
+        }
+        &.gift_img{
+            border: none;
+            width: 300px;
+            height: 320px;
+        }
+        &.colr_img{
+            width: 260px;
+            height: 290px;
+        }
     }
+  
     .product-name{
         text-align: center;
         font-size: 16px;

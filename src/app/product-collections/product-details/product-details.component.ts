@@ -13,6 +13,7 @@ import * as $ from 'jquery';
 })
 export class ProductDetailsComponent implements OnInit {
   currentProductDetails:any
+  panelOpenState:any
   productPolicies=[
     {img:'assets/lifetime_service.webp',Name:'Lifetime Plating Service'},
     {img:'assets/warranty.png',Name:'6 Month Warranty'},
@@ -37,6 +38,7 @@ export class ProductDetailsComponent implements OnInit {
     let userData = this.util.getObservable().subscribe((res) => {
       if(res.currentUserData && res.currentUserData){
         this.currentUserData = res.currentUserData
+        this.currentUserData.productsViewed['productId'].push(this.currentProductDetails.productId)
         this.wishList=res.addWishlistCount ? res.addWishlistCount : []
         this.cartList=res.addCartlistCount ? res.addCartlistCount : []
         this.wishList.forEach(e=>{
@@ -109,7 +111,7 @@ export class ProductDetailsComponent implements OnInit {
       this.cartList=this.util.unique(this.cartList,['_id'])
     }
     this.util.setObservable('addCartlistCount',this.cartList)
-    this.currentUserData ? this.updateCustomer() :false
+    // this.currentUserData ? this.updateCustomer() :null
     this.router.navigate(['/jewel/cart'])
   }
 
@@ -131,7 +133,7 @@ export class ProductDetailsComponent implements OnInit {
       let formatedWish= this.wishList.map(e=>e._id)
       this.currentUserData.wishlistProductIdDetails=formatedWish
       this.util.setObservable('addWishlistCount',this.wishList)
-      // this.util.setObservable('currentUserData',this.currentUserData)
+      this.util.setObservable('currentUserData',this.currentUserData)
     }else{
       this.wishList.push({
         "_id":   this.currentProductDetails.productId,
@@ -148,7 +150,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   async getAllProduct(){
-    return this.api.getProductData().subscribe(async (data:any)=>{
+    return this.api.getCall('Product/getProduct').subscribe(async (data:any)=>{
       console.log(data)
       this.productList=data
       this.productList=this.productList.data
@@ -158,18 +160,26 @@ export class ProductDetailsComponent implements OnInit {
 
   updateCustomer(){
     console.log(this.currentUserData)
-    this.currentUserData.cartProductDetails.map(e=>{
+    let temp=this.currentUserData.cartProductDetails
+    temp.map(e=>{
       delete e.data
-      delete e.productId //e._id
+      delete e._id
     })
-    this.currentUserData.data['cartProductDetails']=this.currentUserData['cartProductDetails']
-    let body=this.currentUserData.data
-    return this.api.CustomerUpdateLogin(body).subscribe(async data=>{
+    let body={
+      // "_id": this.currentUserData.data._id,
+      "email": this.currentUserData.data.email,
+      "cartProductDetails": [],
+  }
+    body['cartProductDetails']=temp
+    // let body=this.currentUserData.data
+    return this.api.postCall('Customer/updateCustomer',body).subscribe(async data=>{
       let snackBarRef = this.snackBar.open("Added to cart successfully",'Close',{
         duration:5000
       });
       console.log(data)
     // this.util.setObservable('currentUserData',data)
+    },err=>{
+      console.log('error in update in customer data',err)
     })
   }
 

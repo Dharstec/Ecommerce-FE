@@ -23,10 +23,11 @@ export class LoginSecurityComponent implements OnInit {
     this.currentDate = new Date().toISOString().slice(0, 10);
     let body={
       "email":'aravindaravi58@gmail.com',
-      "password":'Aravind123'
+      "password":'test@123'
     }
-    this.api.CustomerLogin(body).subscribe(async (data:any)=>{
+    this.api.postCall('Customer/loginCustomer',body).subscribe(async (data:any)=>{
       this.currentUserData=data
+      this.currentUserData.data['password']=sessionStorage.getItem('user_pw')
       this.detailsForm= this.util.getForm('customerDetails',this.currentUserData.data)
       this.showView=true
     })
@@ -45,11 +46,11 @@ export class LoginSecurityComponent implements OnInit {
     body['dateOfBirth']=form.dob
     body['phoneNumber']=form.phoneNo
     body['email']=form.emailId
-    body['password']=form.passcode
-    // this.api.CustomerUpdateLogin(body).subscribe(async (data:any)=>{
-    //   this.util.setCurrentUserData(data.data)
-    //   console.log("updated Succesfully",data)
-    // })
+    // body['password']=form.passcode
+    this.api.postCall('Customer/updateCustomer',body).subscribe(async (data:any)=>{
+      this.util.setCurrentUserData(data.data)
+      console.log("updated Succesfully",data)
+    })
 
   }
 

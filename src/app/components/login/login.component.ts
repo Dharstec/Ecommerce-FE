@@ -31,12 +31,16 @@ export class LoginComponent implements OnInit {
         "email":this.emailId,
         "password":this.passcode
       }
-      this.api.CustomerLogin(body).subscribe(async (data:any)=>{
+      this.api.postCall('Customer/loginCustomer',body).subscribe(async (data:any)=>{
         if(data.status){
           this.loginData=data
           this.errorMessage=false
           await this.util.setObservable('currentUserData',data)
           localStorage.setItem('user_data',JSON.stringify(this.loginData.data))
+          sessionStorage.setItem('access-token',this.loginData.token)
+          sessionStorage.setItem('user_id',this.loginData.data._id)
+          sessionStorage.setItem('user_pw',this.passcode)
+          sessionStorage.setItem('user_name',this.loginData.data.email)
           let snackBarRef = this.snackBar.open("Login Successfully",'Close',{
             duration:5000
           });
@@ -54,12 +58,13 @@ export class LoginComponent implements OnInit {
       let body={
         "email": this.emailId
       }
-      this.api.CustomerLoginForget(body).subscribe(async (data:any)=>{
+      this.api.postCall('Customer/loginCustomer',body).subscribe(async (data:any)=>{
         if(data.message=='reset your password'){
           this.showVerifyOtp=true
         }
         console.log(data)
       }, err => {
+        
         // this.errorMessage=true
         // this.loginData=err.error.message
       })
@@ -68,7 +73,8 @@ export class LoginComponent implements OnInit {
   }
 
   otpVerification(){
-    this.api.verifyOTP(this.otp).subscribe(async (data:any)=>{
+    let url=`Customer/verifyCustomerOtp/${this.otp}`
+    this.api.getCall(url).subscribe(async (data:any)=>{
       if(data.status){
         this.showChangePassword=true
         this.showVerifyOtp=false
@@ -81,9 +87,11 @@ export class LoginComponent implements OnInit {
       "email":this.emailId,
       "password":this.newPasscode
     }
-    this.api.resetPassword(body).subscribe(async (data:any)=>{
-      if(data.status){
-
+    this.api.postCall('Customer/resetPassword',body).subscribe(async (data:any)=>{
+      if(data.status==1){
+        let snackBarRef = this.snackBar.open(data.message,'Close',{
+          duration:3000
+        });
         // this.showSuccessMsg=true
         this.router.navigate(['/jewel/login'])
       }

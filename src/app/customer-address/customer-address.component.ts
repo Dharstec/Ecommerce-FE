@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { UtilService } from '../services/util.service';
+declare var Razorpay: any; 
 
 @Component({
   selector: 'app-customer-address',
@@ -13,6 +15,7 @@ export class CustomerAddressComponent implements OnInit {
   detailsForm: any;
   totalAmt: number;
   paymentPage:any
+  couponCode:any
   productPolicies=[
     {img:'assets/lifetime_service.webp',Name:'Lifetime Plating Service'},
     {img:'assets/warranty.png',Name:'6 Month Warranty'},
@@ -20,8 +23,33 @@ export class CustomerAddressComponent implements OnInit {
     {img:'assets/free_shipping.webp',Name:'Free Shipping'}
   ]
   userData: any;
+  allcouponsList: any;
+  discountAmt: any;
+  subTotalAmt: any;
 
-  constructor(private api:ApiService,private router:Router,private util:UtilService) { }
+  payment_creation_id=null;
+  razorPayOptions = {
+    "key": '', // Enter the Key ID generated from the Dashboard
+    "amount": '', // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise or INR 500.
+    "currency": "INR",
+    "name": "Favouright",
+    "description": "favouright bill payment",
+    "subscription_id":"ORDERID_FROM_BACKEND",
+    "image": "https://example.com/your_logo",
+    "handler": function (response) {
+      console.log("this is the response ",response);
+    },
+    "notes": {
+        "address": "Thank you for saving people in need"
+    },
+    "theme": {
+        "color": "#8bf7a8"
+    },
+    // http_post:this.apiService
+};
+
+
+  constructor(private api:ApiService,private router:Router,private util:UtilService,private snackBar:MatSnackBar) { }
 
   ngOnInit(): void {
 
@@ -35,8 +63,39 @@ export class CustomerAddressComponent implements OnInit {
       }
       this.detailsForm= res.currentUserData ? this.util.getForm('customerAddress',res.currentUserData.data) : this.util.getForm('customerAddress')
       this.setTotalPrice()
+      this.getCouponsCode()
     });
+  }
 
+  getCouponsCode(){
+    this.api.getCall('Coupon/getCoupon').subscribe((res:any)=>{
+      res.data.map(e=>{
+        e['active']=false
+      })
+      this.allcouponsList=res.data
+      console.log('Coupons get',res);
+      
+    }, err=>{
+      console.log("error in get coupon code",err);
+    })
+  }
+  applyDiscount(row){
+    this.allcouponsList.map(e=>e.active=false)
+    this.totalAmt=this.subTotalAmt
+    this.couponCode=row.couponName
+   
+    row['active']=true
+    let percent=row.discountPercentage
+    percent=percent.slice(0, -1)
+
+    this.discountAmt=this.totalAmt*(Number(percent)/100)
+    this.totalAmt-=this.discountAmt.toFixed(2)
+    
+  }
+  removeCoupon(){
+    this.allcouponsList.map(e=>e.active=false)
+    this.couponCode=null
+    this.totalAmt=this.subTotalAmt
   }
 
   setTotalPrice(){
@@ -45,6 +104,15 @@ export class CustomerAddressComponent implements OnInit {
       val = val + (e.quantity*e.data.discountPrice) 
     })
     this.totalAmt=val
+    this.subTotalAmt=val
+  }
+  saveAddress(event){
+    let check=event.target.checked
+    if(check){
+      
+    }else{
+
+    }
   }
 
   updateOrder(){
@@ -58,27 +126,98 @@ export class CustomerAddressComponent implements OnInit {
       "customerName": `${ this.userData?.firstName} ${ this.userData?.lastName}`,
       "customerPhoneNumber": Number(this.userData.phoneNumber),
       "customerEmailId": this.userData.email,
-      "customerAddress": this.userData.customerAddress,
+      "customerAddress": this.detailsForm.get('address').value,
       "orderStatus": [
           "pending"
       ],
       "orders": []
   }
   this.cartListData.map((e,i)=>{
-    let name='order'+i
-    e['orders'].push({
-      name: {
-        "produtDetails": e._id,
+    body['orders'].push({
+        "productId": e._id,
         "quantity": e.quantity
-      }
     })
   })
   console.log('body',body);
   
-    this.api.createorder(body).subscribe(res=>{
-      console.log(res);
+    this.api.postCall('Order/createOrder',body).subscribe((res:any)=>{
+      console.log("response for purchase ",res);
+      // let payload = res.payload;
+      if(res && res.data._id && this.totalAmt){
+        this.razorPayOptions.key ='rzp_test_12TPBZPyRN4lxg';
+        this.razorPayOptions.subscription_id = res["data"]["_id"];
+        this.razorPayOptions.amount = this.totalAmt.toString();
+        console.log("op",this.razorPayOptions)
+        this.razorPayOptions.handler =  this.razorPayResponseHandler;
+        var rzp1 = new Razorpay(this.razorPayOptions);
+        rzp1.open();
+        let snackBarRef = this.snackBar.open(res.message,'Close',{
+          duration:5000
+        });
+        console.log('order created successful',res);
+      }
+      // if (payload["key"] && payload["dbRes"]["order"]["id"] && payload["dbRes"]["order"]["amount"]) {
+      //   this.razorPayOptions.key = payload["key"];
+      //   this.razorPayOptions.order_id = payload["dbRes"]["order"]["id"];
+      //   this.razorPayOptions.amount =  payload["dbRes"]["order"]["amount"];
+        // this.razorPayOptions.handler =  this.razorPayResponseHandler;
+        // this.payment_creation_id = payload["dbRes"]["_id"];
+        // finalObject["_id"] =payload["dbRes"]["_id"]
+        // sessionStorage.setItem("temp",JSON.stringify(finalObject))
+
+
       
-    })
+    // } 
+  }, err=>{
+    console.log("error in order creation",err);
+  })
   }
+
+  razorPayResponseHandler(response){
+    const backend_url=''
+    const paymentId = response.razorpay_payment_id;
+    const url =  backend_url+'/razorpay/'+paymentId+'/'+this.razorPayOptions.amount+'/'+ this.razorPayOptions.subscription_id;
+    console.log(paymentId)
+    // Using my server endpoints to capture the payment
+    fetch(url, {
+    method: 'get',
+    headers: {
+        "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+    }
+    })
+    .then(resp =>  resp.json())
+    .then(function (data) {
+            console.log(data)
+    })
+    .catch(function (error) {
+        console.log('Request failed', error);
+    });
+    //  console.log("final response",response);
+    // let storage_data =sessionStorage.getItem('temp') 
+    // let sess =  JSON.parse(storage_data);
+    // console.log("storage ",sess)
+    // let paymentObject= {
+    //   _id:sess._id,
+    //   payment:response,
+    //   user_name:sess.user_email,
+    //   amount: sess.amount,
+    //   recipient_email:sess.recipient_email,
+    //   user_email:sess.user_name,
+    // }
+    // console.log("payment object ",paymentObject)
+    // BuyGiftCardComponent.API_SERVICE.http_put(CommonURL.URL_PURCHASE_GIFT_CARD_SUCCESS,paymentObject).subscribe(success=>{
+    //   console.log("success");
+    //   alert("payment success send to success page");
+    //   sessionStorage.removeItem('temp');
+    //  },error=>{
+    //   BuyGiftCardComponent.API_SERVICE.http_delete(CommonURL.URL_PURCHASE_GIFT_CARD_ERROR,{_id:paymentObject._id}).subscribe(success_delete=>{
+    //     console.log("error in payment payment suucessfull deleted from db");
+        
+    //   },error=>{
+    //     console.log("error",error)
+    //   })
+    //   console.log("error",error)
+    //  })
+   }
 
 }

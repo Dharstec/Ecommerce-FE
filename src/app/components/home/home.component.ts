@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show()
-    this.api.getProductData().subscribe(async (data:any)=>{
+    this.api.getCall('Product/getProduct').subscribe(async (data:any)=>{
       console.log(data)
       this.productList=data.data
       await this.getlistByCategory()

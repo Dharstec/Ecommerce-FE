@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { UtilService } from '../services/util.service';
@@ -21,7 +22,7 @@ export class AddWishlistComponent implements OnInit {
   ]
   cartListData: any=[];
 
-  constructor(private api:ApiService,private router:Router,private util:UtilService) { }
+  constructor(private api:ApiService,private router:Router,private util:UtilService, private snackBar:MatSnackBar) { }
 
   ngOnInit(): void {
     let userData = this.util.getObservable().subscribe((res) => {
@@ -39,10 +40,13 @@ export class AddWishlistComponent implements OnInit {
   }
 
 
-  deleteProduct(list){
+  removeWishlist(list){
     let index=this.wishListData.findIndex(e=>e.productId==list.productId)
     this.wishListData.splice(index,1)
     this.util.setObservable('addWishlistCount',this.wishListData)
+    let snackBarRef = this.snackBar.open("Wishlist removed successfully",'Close',{
+      duration:5000
+    });
   }
 
   addToCart(row){

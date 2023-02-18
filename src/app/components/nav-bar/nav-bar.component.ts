@@ -76,7 +76,7 @@ export class NavBarComponent implements OnInit {
   }
   selectedNavBar(val,url?:any){
     this.activeNavBar=val
-    return this.router.navigate([url])
+    return this.router.navigate([url],{queryParams:{type:val}})
   }
   search(event?:any){
     let searchValue = event.target.value.toLowerCase()
@@ -97,8 +97,11 @@ export class NavBarComponent implements OnInit {
   logOut(){
        let data={}
        this.util.setObservable('currentUserData',data)
-       localStorage.removeItem('user_data')
+      //  localStorage.removeItem('user_data')
+       localStorage.clear()
+       sessionStorage.clear()
        this.userLogin=false
+       return this.router.navigate(['/jewel/login']) 
   }
 
 

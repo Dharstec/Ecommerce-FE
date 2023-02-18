@@ -6,7 +6,7 @@ import { CommonModule, TitleCasePipe } from '@angular/common';
 // import { NgSelectModule } from '@ng-select/ng-select';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
-// import { AngularMaterialModule}  from './angular-material/angular-material/angular-material.module'
+import { AngularMaterialModule}  from './angular-material/angular-material/angular-material.module'
 //
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -31,6 +31,7 @@ import { LoginSecurityComponent } from './login-security/login-security.componen
 import { OrderDetailsComponent } from './order-details/order-details.component';
 import { CustomerAddressComponent } from './customer-address/customer-address.component';
 import { AddWishlistComponent } from './add-wishlist/add-wishlist.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { AddWishlistComponent } from './add-wishlist/add-wishlist.component';
     LoginSecurityComponent,
     OrderDetailsComponent,
     CustomerAddressComponent,
-    AddWishlistComponent
+    AddWishlistComponent,
+    CarouselComponent
   ],
   imports: [
     AppRoutingModule,
@@ -63,7 +65,7 @@ import { AddWishlistComponent } from './add-wishlist/add-wishlist.component';
     // NgSelectModule,
     FormsModule,
     ReactiveFormsModule,
-    // AngularMaterialModule,
+    AngularMaterialModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
     NgxSpinnerModule
