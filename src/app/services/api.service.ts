@@ -23,6 +23,12 @@ export class ApiService {
     return this.http.post<any>(url, body)
       .pipe(catchError(this.errroHandler))
   }
+  public putCall(uri: any, body: any) {
+    const url = `${rootUrl}${uri}`;
+    return this.http.put<any>(url, body)
+      .pipe(catchError(this.errroHandler))
+  }
+
 
   public errroHandler(error: HttpErrorResponse) {
     return throwError(error);

@@ -46,6 +46,7 @@ export class ProductCollectionsComponent implements OnInit {
   sticky: boolean;
   elementPosition: any;
   prevId:any;
+  pageType: any;
 
   constructor(private util:UtilService,private api:ApiService,private router:Router,private activeRoute:ActivatedRoute,private fb:FormBuilder,private spinner:NgxSpinnerService) {
    }
@@ -59,9 +60,9 @@ export class ProductCollectionsComponent implements OnInit {
        }
    }
   async ngOnInit(): Promise<void> {
-    let type:any =this.activeRoute.queryParams.subscribe(res=>{
+    this.activeRoute.queryParams.subscribe(res=>{
       console.log('ssssssss',res.type)
-      return res.type
+      this.pageType=res.type
     })
     this.spinner.show()
     this.filterForm= this.util.getForm('productFilter')
@@ -71,11 +72,15 @@ export class ProductCollectionsComponent implements OnInit {
       this.productList=data
       this.productList=this.productList.data
       this.allProductList=this.productList
-      if(type=='gift'){
-        this.productList = this.productList.forEach(e=>{
-          return e.gift ?  e :false
-        })
+      if(this.pageType=='gift'){
+        this.productList = this.productList.filter(e=>e.gift)
         console.log('gift product',this.productList )
+      }else if(this.pageType=='personalised'){
+        this.productList = this.productList.filter(e=>e.personalised)
+        console.log('Personalised product',this.productList )
+      }else if(this.pageType=='arrivals'){
+        this.productList = this.productList.filter(e=>e.latest)
+        console.log('New arrived product',this.productList )
       }
      setTimeout(() => {
         this.spinner.hide();

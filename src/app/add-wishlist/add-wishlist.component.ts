@@ -102,55 +102,28 @@ export class AddWishlistComponent implements OnInit {
     this.router.navigate(['/jewel/cart'])
   }
 
-  // addToCart(row){
-  //   if(this.currentUserData){
-  //     let existCart=this.currentUserData.cartProductDetails || []
-  //     if(existCart.length){
-  //       existCart.forEach(e=>{
-  //         if(e.productId==row.productId){
-  //            e['quantity']+=1
-  //         }else{
-  //           existCart.push({
-  //             "productId":   row.productId,
-  //             "quantity": 1,
-  //             "_id":   row.productId
-  //         })
-  //         }
-  //       })
-  //     }else{
-  //       existCart.push({
-  //         "productId":  row.productId,
-  //         "quantity": 1,
-  //         "_id":   row.productId
-  //     })
-  //     }
-  //     existCart=this.util.unique(existCart,['_id'])
-  //     this.util.setObservable('currentUserData',this.currentUserData)
-  //   }else{
-  //     if(this.cartListData.length){
-  //       this.cartListData.forEach(e=>{
-  //         if(e.productId==row.productId){
-  //            e['quantity']+=1
-  //         }else{
-  //          return this.cartListData.push({
-  //             "data": row,
-  //             "quantity": 1,
-  //             "_id":  row.productId
-  //         })
-  //         }
-  //       })
-  //     }else{
-  //       this.cartListData.push({
-  //         "data": row,
-  //         "quantity": 1,
-  //         "_id": row.productId
-  //     })
-  //     }
-  //     this.cartListData=this.util.unique(this.cartListData,['_id'])
-  //     this.util.setObservable('addCartlistCount',this.cartListData)
-  //   }
-  
-  //   this.router.navigate(['/jewel/cart'])
-  // }
+  updateCustomer(){
+    console.log(this.currentUserData)
+    let body;
+ 
+      let temp=this.currentUserData.data.wishlistProductIdDetails
+      temp.map(e=>{
+        delete e.data
+      })
+      body={
+        // "_id": this.currentUserData.data._id,
+        "email": this.currentUserData.data.email,
+        "wishlistProductIdDetails": temp,
+       }
+   
+    return this.api.putCall('Customer/updateCustomer',body).subscribe(async data=>{
+      let snackBarRef = this.snackBar.open('Wishlist removed successfully','Close',{
+        duration:3000
+      });
+      console.log(data)
+    },err=>{
+      console.log('error in update in customer data',err)
+    })
+  }
 
 }

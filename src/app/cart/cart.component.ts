@@ -26,7 +26,7 @@ export class CartComponent implements OnInit {
 
   constructor(private api:ApiService,private router:Router,private util:UtilService, private fb:FormBuilder,private snackBar:MatSnackBar) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.cartForm = this.fb.group({
       quantityArray: this.fb.array([this.addQuantityFormArray('')]),
     })
@@ -112,7 +112,7 @@ export class CartComponent implements OnInit {
     this.cartList.controls.splice(index, 1);
     this.util.setObservable('addCartlistCount',this.cartListData)
     this.setTotalPrice()
-    let snackBarRef = this.snackBar.open("Wishlist removed successfully",'Close',{
+    let snackBarRef = this.snackBar.open("Product removed successfully",'Close',{
       duration:5000
     });
   }

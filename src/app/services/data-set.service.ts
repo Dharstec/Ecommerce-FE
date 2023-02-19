@@ -10,8 +10,6 @@ export class DataSetService {
   private globalObservables: any = {
     currentUserData: null,
     isApplicationLoaded: null,
-    refreshNotification: null,
-    userData: null,
     currentFiltered:null, // Used in all dasboards filter
     addWishlistCount:null, // Used in all dasboards filter
     addCartlistCount:null,

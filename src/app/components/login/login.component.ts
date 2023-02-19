@@ -19,10 +19,12 @@ export class LoginComponent implements OnInit {
   showVerifyOtp: boolean;
   otp:number
   showChangePassword: boolean;
+  productList: any;
 
   constructor(private api:ApiService,private router:Router,private util:UtilService,private snackBar:MatSnackBar) { }
 
   ngOnInit(): void {
+    this.getproductlist()
   }
 
   signIn(){
@@ -34,8 +36,33 @@ export class LoginComponent implements OnInit {
       this.api.postCall('Customer/loginCustomer',body).subscribe(async (data:any)=>{
         if(data.status){
           this.loginData=data
-          this.errorMessage=false
-          await this.util.setObservable('currentUserData',data)
+          this.errorMessage=false 
+          if(this.loginData.data.cartProductDetails){
+            this.loginData.data.cartProductDetails.map(e=>{
+              this.productList.forEach(y=>{
+                if(e.productId==y._id || e._id==y._id ){
+                  e['data']=y
+                }
+              })
+            })
+          }else this.loginData.data.cartProductDetails =[]
+          if(this.loginData.data.wishlistProductIdDetails){
+            this.loginData.data.wishlistProductIdDetails.map((e,i)=>{
+              this.productList.forEach(y=>{
+                if(e==y._id){
+                  this.loginData.data.wishlistProductIdDetails[i]={
+                    _id:e,
+                    data:y
+                  }
+                }
+              })
+            })
+          }else this.loginData.data.wishlistProductIdDetails=[]
+          
+          
+          this.util.setObservable('addWishlistCount',this.loginData.data.wishlistProductIdDetails)
+          this.util.setObservable('addCartlistCount',this.loginData.data.cartProductDetails)
+          this.util.setObservable('currentUserData',data)
           localStorage.setItem('user_data',JSON.stringify(this.loginData.data))
           sessionStorage.setItem('access-token',this.loginData.token)
           sessionStorage.setItem('user_id',this.loginData.data._id)
@@ -70,6 +97,13 @@ export class LoginComponent implements OnInit {
       })
     }
 
+  }
+
+  getproductlist(){
+    return this.api.getCall('Product/getProduct').subscribe(async data=>{
+      this.productList=data.data
+      console.log(data)
+    })
   }
 
   otpVerification(){

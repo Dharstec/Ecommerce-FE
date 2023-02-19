@@ -63,14 +63,15 @@ export class ProductDetailsComponent implements OnInit {
 
   async addToCart(){
     if(this.currentUserData){
-      // this.cartList=this.currentUserData.cartProductDetails || []
+      this.cartList=this.currentUserData.data.cartProductDetails || []
       if(this.cartList.length){
         this.cartList.forEach(e=>{
           if(e.productId==this.currentProductDetails._id){
              e['quantity']+=1
           }else{
             this.cartList.push({
-              "productId":   this.currentProductDetails._id,
+              "data": this.currentProductDetails,
+              "productId":this.currentProductDetails._id,
               "quantity": 1,
               "_id":   this.currentProductDetails._id
           })
@@ -78,14 +79,15 @@ export class ProductDetailsComponent implements OnInit {
         })
       }else{
         this.cartList.push({
-          "productId":   this.currentProductDetails._id,
+          "data": this.currentProductDetails,
+          "productId":this.currentProductDetails._id,
           "quantity": 1,
           "_id":   this.currentProductDetails._id
       })
       }
       this.cartList=this.util.unique(this.cartList,['_id'])
-      this.currentUserData.cartProductDetails=this.cartList
-      this.cartList.map(e=>e.productId==this.currentProductDetails._id ? e['data']=this.currentProductDetails : false)
+      this.currentUserData.data.cartProductDetails=this.cartList
+      // this.cartList.map(e=>e.productId==this.currentProductDetails._id ? e['data']=this.currentProductDetails : false)
       this.util.setObservable('addCartlistCount',this.cartList)
       // await this.updateCustomer()
     }else{
@@ -111,7 +113,7 @@ export class ProductDetailsComponent implements OnInit {
       this.cartList=this.util.unique(this.cartList,['_id'])
     }
     this.util.setObservable('addCartlistCount',this.cartList)
-    // this.currentUserData ? this.updateCustomer() :null
+    this.currentUserData && this.currentUserData.data ? this.updateCustomer('addToCart') :null
     this.router.navigate(['/jewel/cart'])
   }
 
@@ -123,15 +125,15 @@ export class ProductDetailsComponent implements OnInit {
   async addWishlist(){
     // this.addToWishlist=!this.addToWishlist
     if(this.currentUserData){
-      // this.wishList=this.currentUserData.cartProductDetails || []
+      this.wishList=this.currentUserData.data.wishlistProductIdDetails || []
 
       this.wishList.push({
-          "_id":   this.currentProductDetails.productId,
+          "_id":   this.currentProductDetails._id,
           "data": this.currentProductDetails,
       })
       this.wishList=this.util.unique( this.wishList,['_id'])
       let formatedWish= this.wishList.map(e=>e._id)
-      this.currentUserData.wishlistProductIdDetails=formatedWish
+      this.currentUserData.data.wishlistProductIdDetails=formatedWish
       this.util.setObservable('addWishlistCount',this.wishList)
       this.util.setObservable('currentUserData',this.currentUserData)
     }else{
@@ -146,6 +148,7 @@ export class ProductDetailsComponent implements OnInit {
     let snackBarRef = this.snackBar.open("Wishlist updated successfully",'Close',{
       duration:5000
     });
+    this.currentUserData && this.currentUserData.data ? this.updateCustomer('wishlist') :null
     this.router.navigate(['/jewel/add-to-wishlist'])
   }
 
@@ -158,22 +161,34 @@ export class ProductDetailsComponent implements OnInit {
     })
   }
 
-  updateCustomer(){
+  updateCustomer(type?:any){
     console.log(this.currentUserData)
-    let temp=this.currentUserData.cartProductDetails
-    temp.map(e=>{
-      delete e.data
-      delete e._id
-    })
-    let body={
-      // "_id": this.currentUserData.data._id,
-      "email": this.currentUserData.data.email,
-      "cartProductDetails": [],
-  }
-    body['cartProductDetails']=temp
-    // let body=this.currentUserData.data
-    return this.api.postCall('Customer/updateCustomer',body).subscribe(async data=>{
-      let snackBarRef = this.snackBar.open("Added to cart successfully",'Close',{
+    let body;
+    if(type=='addToCart'){
+      let temp=this.currentUserData.data.cartProductDetails
+      temp.map(e=>{
+        delete e.data
+        delete e._id
+      })
+      body={
+        // "_id": this.currentUserData.data._id,
+        "email": this.currentUserData.data.email,
+        "cartProductDetails": temp,
+    }
+    }else{
+      let temp=this.currentUserData.data.wishlistProductIdDetails
+      temp.map(e=>{
+        delete e.data
+      })
+      body={
+        // "_id": this.currentUserData.data._id,
+        "email": this.currentUserData.data.email,
+        "wishlistProductIdDetails": temp,
+    }
+    }
+   
+    return this.api.putCall('Customer/updateCustomer',body).subscribe(async data=>{
+      let snackBarRef = this.snackBar.open(type=='addToCart'?"Added to cart successfully":'Wishlist added successfully','Close',{
         duration:5000
       });
       console.log(data)

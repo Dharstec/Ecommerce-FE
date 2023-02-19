@@ -95,8 +95,9 @@ export class NavBarComponent implements OnInit {
   }
 
   logOut(){
-       let data={}
-       this.util.setObservable('currentUserData',data)
+       this.util.setObservable('currentUserData',null)
+       this.util.setObservable('addWishlistCount',null)
+       this.util.setObservable('addCartlistCount',null)
       //  localStorage.removeItem('user_data')
        localStorage.clear()
        sessionStorage.clear()

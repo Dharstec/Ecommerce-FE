@@ -30,11 +30,11 @@ export class CustomerAddressComponent implements OnInit {
   payment_creation_id=null;
   razorPayOptions = {
     "key": '', // Enter the Key ID generated from the Dashboard
-    "amount": '', // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise or INR 500.
+    "amount": 0, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise or INR 500.
     "currency": "INR",
-    "name": "Favouright",
+    "name": "Silver Jewellery",
     "description": "favouright bill payment",
-    "subscription_id":"ORDERID_FROM_BACKEND",
+    // "order_id":"ORDERID_FROM_BACKEND",
     "image": "https://example.com/your_logo",
     "handler": function (response) {
       console.log("this is the response ",response);
@@ -79,6 +79,10 @@ export class CustomerAddressComponent implements OnInit {
       console.log("error in get coupon code",err);
     })
   }
+  addressSelection(val){
+    this.detailsForm.get('addressType').setValue(val)
+
+  }
   applyDiscount(row){
     this.allcouponsList.map(e=>e.active=false)
     this.totalAmt=this.subTotalAmt
@@ -119,7 +123,7 @@ export class CustomerAddressComponent implements OnInit {
     console.log('user details', this.userData)
     console.log('list', this.cartListData);
     
-    if(!this.userData) return
+    if(!this.userData) return  this.router.navigate(['/jewel/login'])
     let body={
       "orderedBy": this.userData?._id, // customer Id
       "giftWrap": true,
@@ -145,8 +149,8 @@ export class CustomerAddressComponent implements OnInit {
       // let payload = res.payload;
       if(res && res.data._id && this.totalAmt){
         this.razorPayOptions.key ='rzp_test_12TPBZPyRN4lxg';
-        this.razorPayOptions.subscription_id = res["data"]["_id"];
-        this.razorPayOptions.amount = this.totalAmt.toString();
+        // this.razorPayOptions.order_id = res["data"]["_id"];
+        this.razorPayOptions.amount = this.totalAmt*100;
         console.log("op",this.razorPayOptions)
         this.razorPayOptions.handler =  this.razorPayResponseHandler;
         var rzp1 = new Razorpay(this.razorPayOptions);
@@ -176,7 +180,7 @@ export class CustomerAddressComponent implements OnInit {
   razorPayResponseHandler(response){
     const backend_url=''
     const paymentId = response.razorpay_payment_id;
-    const url =  backend_url+'/razorpay/'+paymentId+'/'+this.razorPayOptions.amount+'/'+ this.razorPayOptions.subscription_id;
+    const url =  backend_url+'/razorpay/'+paymentId+'/'+this.razorPayOptions.amount+'/'; //+this.razorPayOptions.order_id
     console.log(paymentId)
     // Using my server endpoints to capture the payment
     fetch(url, {

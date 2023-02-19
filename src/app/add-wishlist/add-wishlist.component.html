@@ -8,13 +8,13 @@
                             <tbody>
                                 <ng-container *ngFor="let row of wishListData;index as i">
                                     <tr class="cursor-pointer border-bottom">
-                                        <td class="w-25 text-left"><img class="" style="width:35%" [src]="row.data.productImage" alt=""></td>
-                                        <td class="text-left">
-                                            <div class="mb-3">
-                                                {{row?.data?.productName}}
+                                        <td class="w-75 text-left flex-custom" style="align-items: center;"><img class="" style="width:10%" [src]="row.data.productImage" alt="">
+                                            <div class="ml-4">
+                                               <label> {{row?.data?.productName}}</label>
                                             </div>
                                         </td>
-                                        <td class="text-lg-right font-color">
+                        
+                                        <td class="text-lg-right font-color w-25">
                                             <div class="text-priceOriginal mb-1">{{row?.data?.discountPrice | currency:'INR'}}</div>
                                             <div class="mb-1"><s>{{row?.data?.actualPrice | currency:'INR'}}</s></div>
                                            <button class="btn btn-secondary mr-3" (click)="removeWishlist(row)">Remove Wishlist</button>

@@ -14,6 +14,75 @@
                             <input formControlName="emailId"  placeholder="Email ID" autocomplete="off" class="form-control" type="email" id="email-id">  
                         </div>
                         <ng-container *ngIf="userData && userData.Address.length">
+                            <h2 class="mb-4">Shipping Details</h2>
+                            <div class="shipping_details mb-4" style="text-align: initial;">
+
+                                <table class="table mb-3">
+                                        <tbody>
+                                            <tr class="border-bottom">
+                                                <td class="border-0"><input type="radio" id="cashFree" name="addressType" (change)="addressSelection('exist')" class="mr-2" value="exist" checked>
+                                                    <label for="cashFree">Address Details</label> </td>
+                                            </tr>
+                                            <tr class="border-bottom">
+                                                <td class="border-0"><input type="radio"  name="addressType" id="different" (change)="addressSelection('different')" class="mr-2" value="different" >
+                                                    <label for="different">
+                                                        Use a different billing address
+                                                    </label></td>
+                                            </tr>
+                                        </tbody>
+                                </table>
+    
+                            </div>
+                            <div *ngIf="detailsForm.get('addressType').value=='different'">
+                                <div class="form-name mb-4">
+                                    <label>Country</label>
+                                    <input formControlName="countryName" placeholder="Country" autocomplete="off" class="form-control" type="text" id="countryName">  
+                                </div>
+                                <div class="flex-custom">
+                                    <div class="form-name mb-4 mr-3 w-50">
+                                        <label>First Name</label>
+                                        <input formControlName="firstName" placeholder="First Name" autocomplete="off" class="form-control" type="text" id="firstName">  
+                                    </div>
+                                    <div class="form-name mb-4 w-50">
+                                        <label>Last Name</label>
+                                        <input formControlName="lastName" placeholder="Last Name" autocomplete="off" class="form-control" type="text" id="lastName">  
+                                    </div>
+                                </div>
+                                <div class="flex-custom">
+                                    <div class="form-name mb-4 mr-3">
+                                        <label>City</label>
+                                        <input formControlName="cityName" placeholder="City" autocomplete="off" class="form-control" type="text" id="cityName">  
+                                    </div>
+                                    <div class="form-name mb-4 mr-3">
+                                        <label>State</label>
+                                        <input formControlName="stateName" placeholder="State" autocomplete="off" class="form-control" type="text" id="stateName">  
+                                    </div>
+                                    <div class="form-name mb-4">
+                                        <label>PIN code</label>
+                                        <input formControlName="pinCode" placeholder="PIN code" autocomplete="off" class="form-control" type="text" id="pinCode">  
+                                    </div>
+                                </div>
+                                <div class="form-name mb-4">
+                                    <label>Address, suite, etc.</label>
+                                    <input formControlName="address" placeholder="Address, suite, etc." autocomplete="off" class="form-control" type="text" id="address">  
+                                </div>
+                                <div class="form-name mb-4">
+                                    <label>Phone No.</label>
+                                    <input formControlName="phoneNo" placeholder="Phone No." autocomplete="off" class="form-control" type="text" id="phoneNo">  
+                                </div>
+                                <div class="flex-custom mb-4">
+                                    <input type="checkbox" id="saveInfo" formControlName="saveInfo" class="mr-3 mb-1" autocomplete="off" (change)="saveAddress($event)">
+                                    <label for="saveInfo">	Save this information for next time</label>
+                                </div>
+                                <div class="flex-custom mb-4">
+                                    <div class="mb-2 mr-auto">
+                                        <button class="btn btn-secondary mr-2"  routerLink="/jewel/cart" >Return to Cart</button>
+                                    </div>
+                                    <div class="mb-2">
+                                        <button class="btn btn-dark mr-2" (click)="paymentPage=true" [class.disabled]="detailsForm.invalid">Continue to Payment</button>
+                                    </div>
+                                </div>
+                            </div>
 
                         </ng-container>
                         <ng-container *ngIf="!userData || !userData.Address.length">
@@ -66,6 +135,8 @@
                                     <button class="btn btn-dark mr-2" (click)="paymentPage=true" [class.disabled]="detailsForm.invalid">Continue to Payment</button>
                                 </div>
                             </div>
+                            
+                           
                         </ng-container>
                         
                            <!-- static policy content -->
@@ -183,9 +254,12 @@
                     <button class="ml-12 btn btn-dark">Apply</button>
                 </div>
                 <div class="mt-4 mb-4" *ngIf="couponCode">
-                    <mat-chip-list>
+                    <div class="globo-selected" (click)="removeCoupon()">
+                        {{couponCode}}<img class="d-arrow" src="/assets/close.svg" alt="">
+                    </div>
+                    <!-- <mat-chip-list>
                         <mat-chip>{{couponCode}}<img (click)="removeCoupon()" class="d-arrow" src="/assets/close.svg" alt=""></mat-chip>
-                      </mat-chip-list>
+                      </mat-chip-list> -->
                 </div>
                 <!-- <div class="form-name mb-4">
                     <label>Redeem GIVA Gift Card</label>

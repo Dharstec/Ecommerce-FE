@@ -4,6 +4,7 @@
     background: #ffffff;
     padding: 0px 300px;
     text-align: center;
+    min-height: 196px;
     color: #3d4246;
     .stepper{
         font-size: 12px;
@@ -79,6 +80,7 @@
     margin-bottom: 10px;
     min-width: 30%;
     margin-right: 7px;
+    border-radius: 10px;
     &.active_code{
         border-color: #FF8EA7 !important;
         color: #FF8EA7;
@@ -87,5 +89,16 @@
         border-color: #FF8EA7 !important;
         color: #FF8EA7;
     }
+}
+
+.globo-selected{
+    padding: 10px;
+    // border: 1px solid #e8e8e8;
+    width: fit-content;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    background: #e8e8e8;
+    margin-right: 4px;
 }
 

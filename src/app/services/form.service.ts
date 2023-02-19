@@ -39,6 +39,7 @@ export class FormService {
         let tempForm = this.formBuilder.group({
           firstName:[data && data.firstName ? data.firstName : null,[Validators.required]],
           lastName:[data && data.lastName ? data.lastName : null,[Validators.required]],
+          addressType:[data && data.address ? data.address : null],
           phoneNo:[data && data.phoneNumber ? data.phoneNumber : null,[Validators.required,Validators.maxLength(10),Validators.pattern(this.numberRegEx)]],
           emailId:[data && data.email ? data.email : null,[Validators.required,Validators.email]],
           countryName:[data && data.countryName ? data.countryName : null,[Validators.required]],
