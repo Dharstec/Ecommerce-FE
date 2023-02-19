@@ -67,9 +67,9 @@
               <a (click)="loginPage()"><img class="d-arrow mr-12" src="assets/login/login.svg" alt="">Log in</a>
             </div>
             <div class="dropdown-content login_drp" *ngIf="userLogin" >
-              <a href="/jewel/login-security" (click)="activeNavBar=''" ><img class="d-arrow mr-12" src="assets/login/security.svg" alt="">Login & Security</a>
-              <a href="/jewel/order-details" (click)="activeNavBar=''" ><img class="d-arrow mr-12" src="assets/login/order.svg" alt="">Your Orders</a>
-              <a href="/jewel/customer-address" (click)="activeNavBar=''" ><img class="d-arrow mr-12" src="assets/login/address.svg" alt="">Your Addresses</a>
+              <a (click)="route('ls')" ><img class="d-arrow mr-12" src="assets/login/security.svg" alt="">Login & Security</a>
+              <a (click)="route('od')" ><img class="d-arrow mr-12" src="assets/login/order.svg" alt="">Your Orders</a>
+              <a (click)="route('ca')" ><img class="d-arrow mr-12" src="assets/login/address.svg" alt="">Your Addresses</a>
               <a (click)="logOut()"><img class="d-arrow mr-12" src="assets/login/logout.svg" alt="">Log out</a>
             </div>
           </span>

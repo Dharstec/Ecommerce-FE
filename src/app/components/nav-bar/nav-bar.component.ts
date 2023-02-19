@@ -93,6 +93,15 @@ export class NavBarComponent implements OnInit {
       return this.router.navigate(['/jewel/login']) 
     }else return
   }
+  route(type){
+    this.activeNavBar=''
+    switch (type){
+      case 'ls':  return this.router.navigate(['/jewel/login-security']) 
+      case 'od':  return this.router.navigate(['/jewel/order-details']) 
+      case 'ca':  return this.router.navigate(['/jewel/customer-address']) 
+    }
+  
+  }
 
   logOut(){
        this.util.setObservable('currentUserData',null)
