@@ -122,8 +122,11 @@ export class CustomerAddressComponent implements OnInit {
   updateOrder(){
     console.log('user details', this.userData)
     console.log('list', this.cartListData);
-    
+    let form=this.detailsForm.getRawValue()
     if(!this.userData) return  this.router.navigate(['/jewel/login'])
+    if(form.saveInfo){
+      ///update the address
+    }
     let body={
       "orderedBy": this.userData?._id, // customer Id
       "giftWrap": true,
@@ -196,32 +199,6 @@ export class CustomerAddressComponent implements OnInit {
     .catch(function (error) {
         console.log('Request failed', error);
     });
-    //  console.log("final response",response);
-    // let storage_data =sessionStorage.getItem('temp') 
-    // let sess =  JSON.parse(storage_data);
-    // console.log("storage ",sess)
-    // let paymentObject= {
-    //   _id:sess._id,
-    //   payment:response,
-    //   user_name:sess.user_email,
-    //   amount: sess.amount,
-    //   recipient_email:sess.recipient_email,
-    //   user_email:sess.user_name,
-    // }
-    // console.log("payment object ",paymentObject)
-    // BuyGiftCardComponent.API_SERVICE.http_put(CommonURL.URL_PURCHASE_GIFT_CARD_SUCCESS,paymentObject).subscribe(success=>{
-    //   console.log("success");
-    //   alert("payment success send to success page");
-    //   sessionStorage.removeItem('temp');
-    //  },error=>{
-    //   BuyGiftCardComponent.API_SERVICE.http_delete(CommonURL.URL_PURCHASE_GIFT_CARD_ERROR,{_id:paymentObject._id}).subscribe(success_delete=>{
-    //     console.log("error in payment payment suucessfull deleted from db");
-        
-    //   },error=>{
-    //     console.log("error",error)
-    //   })
-    //   console.log("error",error)
-    //  })
    }
 
 }

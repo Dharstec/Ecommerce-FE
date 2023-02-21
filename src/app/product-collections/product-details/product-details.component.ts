@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { UtilService } from 'src/app/services/util.service';
 import * as $ from 'jquery';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-product-details',
@@ -85,10 +86,10 @@ export class ProductDetailsComponent implements OnInit {
           "_id":   this.currentProductDetails._id
       })
       }
-      this.cartList=this.util.unique(this.cartList,['_id'])
+      this.cartList=this.util.unique(this.cartList,['productId'])
       this.currentUserData.data.cartProductDetails=this.cartList
       // this.cartList.map(e=>e.productId==this.currentProductDetails._id ? e['data']=this.currentProductDetails : false)
-      this.util.setObservable('addCartlistCount',this.cartList)
+      // this.util.setObservable('addCartlistCount',this.cartList)
       // await this.updateCustomer()
     }else{
       if(this.cartList.length){
@@ -138,7 +139,7 @@ export class ProductDetailsComponent implements OnInit {
       this.util.setObservable('currentUserData',this.currentUserData)
     }else{
       this.wishList.push({
-        "_id":   this.currentProductDetails.productId,
+        "_id":   this.currentProductDetails._id,
         "data": this.currentProductDetails,
     })
 
@@ -165,7 +166,7 @@ export class ProductDetailsComponent implements OnInit {
     console.log(this.currentUserData)
     let body;
     if(type=='addToCart'){
-      let temp=this.currentUserData.data.cartProductDetails
+      let temp=_.cloneDeep(this.currentUserData.data.cartProductDetails)
       temp.map(e=>{
         delete e.data
         delete e._id
@@ -176,7 +177,7 @@ export class ProductDetailsComponent implements OnInit {
         "cartProductDetails": temp,
     }
     }else{
-      let temp=this.currentUserData.data.wishlistProductIdDetails
+      let temp=_.cloneDeep(this.currentUserData.data.wishlistProductIdDetails)
       temp.map(e=>{
         delete e.data
       })
@@ -192,7 +193,6 @@ export class ProductDetailsComponent implements OnInit {
         duration:5000
       });
       console.log(data)
-    // this.util.setObservable('currentUserData',data)
     },err=>{
       console.log('error in update in customer data',err)
     })

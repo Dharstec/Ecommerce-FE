@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { UtilService } from '../services/util.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-cart',
@@ -111,13 +112,33 @@ export class CartComponent implements OnInit {
     this.cartListData.splice(index,1)
     this.cartList.controls.splice(index, 1);
     this.util.setObservable('addCartlistCount',this.cartListData)
+    this.updateCustomer()
     this.setTotalPrice()
-    let snackBarRef = this.snackBar.open("Product removed successfully",'Close',{
-      duration:5000
-    });
   }
   routeToNext(){
     this.router.navigate(['/jewel/customer-address'])
+  }
+  updateCustomer(){
+    console.log(this.currentUserData)
+    let body;
+    let temp=_.cloneDeep(this.currentUserData.cartProductDetails)
+      temp.map(e=>{
+        delete e.data
+      })
+      body={
+        // "_id": this.currentUserData.data._id,
+        "email": this.currentUserData.email,
+        "cartProductDetails": temp,
+       }
+   
+    return this.api.putCall('Customer/updateCustomer',body).subscribe(async data=>{
+      let snackBarRef = this.snackBar.open('Product removed successfully','Close',{
+        duration:3000
+      });
+      console.log(data)
+    },err=>{
+      console.log('error in update in customer data',err)
+    })
   }
 
 }

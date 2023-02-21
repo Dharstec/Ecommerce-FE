@@ -48,6 +48,7 @@ export class FormService {
           pinCode:[data && data.pinCode ? data.pinCode : null,[Validators.required]],
           address:[data && data.address ? data.address : null,[Validators.required]],
           saveInfo:[data && data.saveInfo ? data.saveInfo : null],
+          paymentType:[data && data.paymentType ? data.paymentType : 'razorPay'],
         })
         return tempForm;
       }

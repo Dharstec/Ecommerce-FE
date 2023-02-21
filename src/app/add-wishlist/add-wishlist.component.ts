@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { UtilService } from '../services/util.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-add-wishlist',
@@ -44,9 +45,14 @@ export class AddWishlistComponent implements OnInit {
     let index=this.wishListData.findIndex(e=>e.productId==list.productId)
     this.wishListData.splice(index,1)
     this.util.setObservable('addWishlistCount',this.wishListData)
-    let snackBarRef = this.snackBar.open("Wishlist removed successfully",'Close',{
-      duration:5000
-    });
+    if(this.currentUserData){
+      this.updateCustomer('removeWishlist') 
+    }else{
+      let snackBarRef = this.snackBar.open("Wishlist removed successfully",'Close',{
+        duration:5000
+      });
+    }
+  
   }
 
   addToCart(row){
@@ -58,6 +64,7 @@ export class AddWishlistComponent implements OnInit {
              e['quantity']+=1
           }else{
             this.cartListData.push({
+              "data": row,
               "productId":   row._id,
               "quantity": 1,
               "_id":   row._id
@@ -66,12 +73,13 @@ export class AddWishlistComponent implements OnInit {
         })
       }else{
         this.cartListData.push({
+          "data": row,
           "productId":  row._id,
           "quantity": 1,
           "_id":  row._id
       })
       }
-      this.cartListData=this.util.unique(this.cartListData,['_id'])
+      this.cartListData=this.util.unique(this.cartListData,['productId'])
       this.currentUserData.cartProductDetails=this.cartListData
       this.cartListData.map(e=>e.productId==row._id ? e['data']=row : false)
       this.util.setObservable('addCartlistCount',this.cartListData)
@@ -99,26 +107,39 @@ export class AddWishlistComponent implements OnInit {
       this.cartListData=this.util.unique(this.cartListData,['_id'])
     }
     this.util.setObservable('addCartlistCount',this.cartListData)
+    this.currentUserData && this.currentUserData.data ? this.updateCustomer('addToCart') :null
     this.router.navigate(['/jewel/cart'])
   }
 
-  updateCustomer(){
+  updateCustomer(type?:any){
     console.log(this.currentUserData)
     let body;
- 
-      let temp=this.currentUserData.data.wishlistProductIdDetails
+    if(type=='addToCart'){
+      let temp=_.cloneDeep(this.currentUserData.cartProductDetails)
+      temp.map(e=>{
+        delete e.data
+        delete e._id
+      })
+      body={
+        // "_id": this.currentUserData.data._id,
+        "email": this.currentUserData.email,
+        "cartProductDetails": temp,
+    }
+    }else{
+      let temp=_.cloneDeep(this.currentUserData.wishlistProductIdDetails)
       temp.map(e=>{
         delete e.data
       })
       body={
         // "_id": this.currentUserData.data._id,
-        "email": this.currentUserData.data.email,
+        "email": this.currentUserData.email,
         "wishlistProductIdDetails": temp,
-       }
+    }
+    }
    
     return this.api.putCall('Customer/updateCustomer',body).subscribe(async data=>{
-      let snackBarRef = this.snackBar.open('Wishlist removed successfully','Close',{
-        duration:3000
+      let snackBarRef = this.snackBar.open(type=='addToCart'?"Removed from cart successfully":'Wishlist removed successfully','Close',{
+        duration:5000
       });
       console.log(data)
     },err=>{

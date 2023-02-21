@@ -99,7 +99,7 @@ export class RegisterComponent implements OnInit {
     this.api.getCall(url).subscribe(async (data:any)=>{
       if(data.status){
         this.showSuccessMsg=true
-        this.router.navigate(['/jewel/product-collections'])
+        this.router.navigate(['/jewel/login'])
       }else this.showErrorMsg=true
       console.log(data)
     })
