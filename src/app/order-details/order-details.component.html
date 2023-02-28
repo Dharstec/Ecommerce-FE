@@ -1,4 +1,79 @@
 <div class="main-content">
-    <img class="accordion_img ml-auto mr-auto mt-4 mb-3" src="assets/comingsoon.png" alt="">
-    <!-- Coming soon -->
+    <ng-container *ngIf="orderList.length">
+        <div>
+            <h5 class="mb-4">Your Order</h5>
+            <div class="flex-custom">
+                    <div>
+                        <table class="table">
+                            <tbody>
+                                <ng-container *ngFor="let row of orderList;index as i">
+                                    <tr class="cursor-pointer border-bottom" *ngIf="row.orders[0].productId">
+                                        <td class="w-75 text-left flex-custom" style="align-items: center;"><img class="" style="width:10%" [src]="row.orders[0].productId.productImage" alt="">
+                                            <div class="ml-4">
+                                               <label> {{row?.orders[0].productId.productName}}</label>
+                                               <label> Order Id :{{row?._id}}</label>
+                                            </div>
+                                        </td>
+                        
+                                        <td class="text-lg-right font-color w-50">
+                                            <!-- <div class="text-priceOriginal mb-1">{{row?.data?.discountPrice | currency:'INR'}}</div>
+                                            <div class="mb-1"><s>{{row?.data?.actualPrice | currency:'INR'}}</s></div> -->
+                                           <!-- <button class="btn btn-secondary mr-3" (click)="removeWishlist(row)">Remove Wishlist</button> -->
+                                           <button class="btn btn-secondary">{{row?.orderStatus=='pending' ? 'Yet to dispatch' : row.orderStatus}}</button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                        <div class="product-policies">
+                        <ng-container *ngFor="let policy of productPolicies">
+                                <ul class="tags p-1 mr-3">
+                                    <li style="list-style: none;">
+                                        <div class="flex-custom" style="align-items: center;">
+                                            <img class="" src="assets/tick.svg" alt="">
+                                            <p>{{policy?.Name}}</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                        </ng-container>
+                    </div>
+                    </div>
+                  
+<!-- 
+                   <div class="summary">
+                    <label class="text-left">Order Summary</label>
+                    <table class="table mb-3">
+                        <tbody>
+                            <tr class="">
+                                <td class="text-left">Subtotal</td>
+                                <td class="text-right">{{totalAmt | currency:'INR'}}</td>
+                            </tr>
+                            <tr class="border-bottom">
+                                <td class="text-left">Shipping:</td>
+                                <td class="text-right">Free</td>
+                            </tr>
+                            <tr class="">
+                                <td class="text-left">Total</td>
+                                <td class="text-right">{{totalAmt | currency:'INR'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <label class="p-2">P.S: Use discount code on the checkout page</label>
+                    <div class="">
+                        <button class="btn btn-dark" (click)="routeToNext()">Checkout Securely</button>
+                    </div>
+    
+                   </div> -->
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!orderList.length">
+        <div>
+            <h3 class="mb-4 font-weight-bolder">Your order</h3>
+            <div class="mb-2">Your order is empty</div>
+            <button class="btn btn-secondary mb-12" routerLink="/jewel/product-collections">CONTINUE SHOPPING</button>
+        </div>
+    </ng-container>
+    
+
 </div>

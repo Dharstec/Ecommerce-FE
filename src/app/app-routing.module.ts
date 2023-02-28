@@ -8,6 +8,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CustomerAddressComponent } from './customer-address/customer-address.component';
 import { GiftProductComponent } from './gift-product/gift-product.component';
+import { AuthGuard } from './guards/auth.guard';
 import { LoginSecurityComponent } from './login-security/login-security.component';
 import { NewArrivalsProductComponent } from './new-arrivals-product/new-arrivals-product.component';
 import { OrderDetailsComponent } from './order-details/order-details.component';
@@ -20,7 +21,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'jewel', pathMatch: 'full' },
   { path: 'jewel', component: NavBarComponent,data: { title: 'Home'},
   children: [
-    { path: '', redirectTo: 'ProductCollectionsComponent',pathMatch: 'full' },
+    { path: '', redirectTo: 'product-collections',pathMatch: 'full' },
     { path: 'home', component: HomeComponent, data: { title: 'Home'}},
     { path: 'login', component: LoginComponent, data: { title: 'Login'}},
     { path: 'register', component: RegisterComponent,data: { title: 'Register'}},

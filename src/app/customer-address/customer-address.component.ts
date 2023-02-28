@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormArray } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
@@ -79,9 +80,23 @@ export class CustomerAddressComponent implements OnInit {
       console.log("error in get coupon code",err);
     })
   }
-  addressSelection(val){
+  addressSelection(val,data?:any,type?:any){
     this.detailsForm.get('addressType').setValue(val)
-
+    if(val=='exist'){
+      this.detailsForm.get('address').setValue(data.doorNoAndStreet ? data.doorNoAndStreet :'')
+      this.detailsForm.get('cityName').setValue(data.city? data.city :'')
+      this.detailsForm.get('stateName').setValue(data.state? data.state :'')
+      this.detailsForm.get('pinCode').setValue(data.pincode? data.pincode :'')
+      this.detailsForm.get('countryName').setValue(data.country? data.country :'')
+      this.detailsForm.get('landmark').setValue(data.landmark? data.landmark :'')
+    
+    }
+  }
+  get addressList() {
+    return this.detailsForm.get('addressArray') as FormArray;
+  }
+  paymentMethod(val){
+    this.detailsForm.get('paymentType').setValue(val)
   }
   applyDiscount(row){
     this.allcouponsList.map(e=>e.active=false)
@@ -119,25 +134,34 @@ export class CustomerAddressComponent implements OnInit {
     }
   }
 
-  updateOrder(){
+  async updateOrder(){
     console.log('user details', this.userData)
     console.log('list', this.cartListData);
     let form=this.detailsForm.getRawValue()
+    console.log('form', form);
     if(!this.userData) return  this.router.navigate(['/jewel/login'])
-    if(form.saveInfo){
-      ///update the address
-    }
+    
     let body={
       "orderedBy": this.userData?._id, // customer Id
       "giftWrap": true,
       "customerName": `${ this.userData?.firstName} ${ this.userData?.lastName}`,
       "customerPhoneNumber": Number(this.userData.phoneNumber),
       "customerEmailId": this.userData.email,
-      "customerAddress": this.detailsForm.get('address').value,
-      "orderStatus": [
-          "pending"
-      ],
-      "orders": []
+      "customerAddress": {
+          "doorNoAndStreet":form.address,
+          "city":form.cityName,
+          "state":form.stateName,
+          "pincode":form.pinCode,
+          "landmark":form.landmark,
+          "country":form.countryName,
+        },
+      "orderStatus": "pending",
+      "orders": [],
+      "modeOfPayment":[{
+            "mode": form.paymentType,
+            "status": "0",
+            "comment": "pending"
+        }]
   }
   this.cartListData.map((e,i)=>{
     body['orders'].push({
@@ -147,10 +171,10 @@ export class CustomerAddressComponent implements OnInit {
   })
   console.log('body',body);
   
-    this.api.postCall('Order/createOrder',body).subscribe((res:any)=>{
+    this.api.postCall('Order/createOrder',body).subscribe(async(res:any)=>{
       console.log("response for purchase ",res);
       // let payload = res.payload;
-      if(res && res.data._id && this.totalAmt){
+      if(res && res.data._id && this.totalAmt && form.paymentType=='razorPay'){
         this.razorPayOptions.key ='rzp_test_12TPBZPyRN4lxg';
         // this.razorPayOptions.order_id = res["data"]["_id"];
         this.razorPayOptions.amount = this.totalAmt*100;
@@ -162,15 +186,12 @@ export class CustomerAddressComponent implements OnInit {
           duration:5000
         });
         console.log('order created successful',res);
+      }else{
+        let snackBarRef = this.snackBar.open(res.message,'Close',{
+          duration:5000
+        });
       }
-      // if (payload["key"] && payload["dbRes"]["order"]["id"] && payload["dbRes"]["order"]["amount"]) {
-      //   this.razorPayOptions.key = payload["key"];
-      //   this.razorPayOptions.order_id = payload["dbRes"]["order"]["id"];
-      //   this.razorPayOptions.amount =  payload["dbRes"]["order"]["amount"];
-        // this.razorPayOptions.handler =  this.razorPayResponseHandler;
-        // this.payment_creation_id = payload["dbRes"]["_id"];
-        // finalObject["_id"] =payload["dbRes"]["_id"]
-        // sessionStorage.setItem("temp",JSON.stringify(finalObject))
+       form.addressType!='exist' ? await this.updateCustomer() :false
 
 
       
@@ -194,11 +215,52 @@ export class CustomerAddressComponent implements OnInit {
     })
     .then(resp =>  resp.json())
     .then(function (data) {
-            console.log(data)
+            console.log('payement razor pay',data)
     })
     .catch(function (error) {
         console.log('Request failed', error);
     });
    }
+
+   updateCustomer(type?:any){
+    console.log(this.userData)
+    let body;
+    let form =this.detailsForm.getRawValue()
+    if(this.userData.address.length){
+      body={
+        "_id": this.userData._id,
+        "address":this.userData.address
+      }
+    }else{
+      body={
+        "_id": this.userData._id,
+        "customerAddress": {
+          "doorNoAndStreet":form.address,
+          "city":form.cityName,
+          "state":form.stateName,
+          "pincode":form.pinCode,
+          "landmark":form.landmark,
+          "country":form.countryName,
+        },
+        "address":[],
+      }
+    }
+    if(form.saveInfo){
+      ///update the address
+      body.address.push({
+        "doorNoAndStreet":form.address,
+        "city":form.cityName,
+        "state":form.stateName,
+        "pincode":form.pinCode,
+        "landmark":form.landmark,
+        "country":form.countryName,
+      })
+    }
+    return this.api.putCall('Customer/updateCustomer',body).subscribe(async data=>{
+      console.log('updated customer address',data)
+    },err=>{
+      console.log('error in update in customer data',err)
+    })
+  }
 
 }

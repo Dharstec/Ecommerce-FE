@@ -53,7 +53,7 @@ export class ProductCollectionsComponent implements OnInit {
    @HostListener('window:scroll', ['$event'])
    handleScroll(){
        const windowScroll = window.pageYOffset;
-       if(windowScroll >= (this.elementPosition-120)){
+       if(windowScroll >= (this.elementPosition-70)){
            this.sticky = true;
        } else {
            this.sticky = false;

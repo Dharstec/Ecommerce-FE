@@ -13,19 +13,19 @@
                             <label>Email ID</label>
                             <input formControlName="emailId"  placeholder="Email ID" autocomplete="off" class="form-control" type="email" id="email-id">  
                         </div>
-                        <ng-container *ngIf="userData && userData.Address.length">
+                        <ng-container *ngIf="userData && userData.address.length">
                             <h2 class="mb-4">Shipping Details</h2>
                             <div class="shipping_details mb-4" style="text-align: initial;">
 
                                 <table class="table mb-3">
                                         <tbody>
-                                            <tr class="border-bottom">
-                                                <td class="border-0"><input type="radio" id="cashFree" name="addressType" (change)="addressSelection('exist')" class="mr-2" value="exist" checked>
-                                                    <label for="cashFree">Address Details</label> </td>
+                                            <tr class="border-bottom" *ngFor="let data of userData.address; index as i">
+                                                <td class="border-0 flex-align"><input type="radio" id="existAddress_{{i}}" name="addressType" (change)="addressSelection('exist',data)" class="mr-2" value="exist" checked>
+                                                    <label class="m-0" for="existAddress_{{i}}">Address - {{data.doorNoAndStreet}}, {{data.city}}, {{data.state}}, {{data.pincode}}  </label> </td>
                                             </tr>
                                             <tr class="border-bottom">
-                                                <td class="border-0"><input type="radio"  name="addressType" id="different" (change)="addressSelection('different')" class="mr-2" value="different" >
-                                                    <label for="different">
+                                                <td class="border-0 flex-align"><input type="radio"  name="addressType" id="different" (change)="addressSelection('different')" class="mr-2" value="different" >
+                                                    <label class="m-0" for="different">
                                                         Use a different billing address
                                                     </label></td>
                                             </tr>
@@ -67,6 +67,10 @@
                                     <input formControlName="address" placeholder="Address, suite, etc." autocomplete="off" class="form-control" type="text" id="address">  
                                 </div>
                                 <div class="form-name mb-4">
+                                    <label>Landmark</label>
+                                    <input formControlName="landmark" placeholder="Landmark" autocomplete="off" class="form-control" type="text" id="landmark">  
+                                </div>
+                                <div class="form-name mb-4">
                                     <label>Phone No.</label>
                                     <input formControlName="phoneNo" placeholder="Phone No." autocomplete="off" class="form-control" type="text" id="phoneNo">  
                                 </div>
@@ -74,18 +78,19 @@
                                     <input type="checkbox" id="saveInfo" formControlName="saveInfo" class="mr-3 mb-1" autocomplete="off" (change)="saveAddress($event)">
                                     <label for="saveInfo">	Save this information for next time</label>
                                 </div>
-                                <div class="flex-custom mb-4">
-                                    <div class="mb-2 mr-auto">
-                                        <button class="btn btn-secondary mr-2"  routerLink="/jewel/cart" >Return to Cart</button>
-                                    </div>
-                                    <div class="mb-2">
-                                        <button class="btn btn-dark mr-2" (click)="paymentPage=true" [class.disabled]="detailsForm.invalid">Continue to Payment</button>
-                                    </div>
+                                
+                            </div>
+                            <div class="flex-custom mb-4">
+                                <div class="mb-2 mr-auto">
+                                    <button class="btn btn-secondary mr-2"  routerLink="/jewel/cart" >Return to Cart</button>
+                                </div>
+                                <div class="mb-2">
+                                    <button class="btn btn-dark mr-2" (click)="paymentPage=true" [class.disabled]="detailsForm.invalid && !(detailsForm.value.addressType=='exist' && detailsForm.value.emailId)">Continue to Payment</button>
                                 </div>
                             </div>
 
                         </ng-container>
-                        <ng-container *ngIf="!userData || !userData.Address.length">
+                        <ng-container *ngIf="!userData || !userData.address.length">
                             <h2 class="mb-4">Shipping Details</h2>
                             <div class="form-name mb-4">
                                 <label>Country</label>
@@ -118,6 +123,10 @@
                             <div class="form-name mb-4">
                                 <label>Address, suite, etc.</label>
                                 <input formControlName="address" placeholder="Address, suite, etc." autocomplete="off" class="form-control" type="text" id="address">  
+                            </div>
+                            <div class="form-name mb-4">
+                                <label>Landmark</label>
+                                <input formControlName="landmark" placeholder="Landmark" autocomplete="off" class="form-control" type="text" id="landmark">  
                             </div>
                             <div class="form-name mb-4">
                                 <label>Phone No.</label>
@@ -188,40 +197,17 @@
                                                 <label for="cashFree">Payment</label> </td>
                                         </tr> -->
                                         <tr class="border-bottom">
-                                            <td class="border-0"><input type="radio" id="razorPay" name="payment" class="mr-2" value="razorPay" checked>
-                                                <label for="razorPay">Razorpay Secure (UPI, Cards, Wallets, NetBanking)</label></td>
+                                            <td class="border-0 flex-align"><input type="radio" id="razorPay" name="payment" class="mr-2" value="razorPay" (change)="paymentMethod('razorPay')"  checked>
+                                                <label class="m-0" for="razorPay">Razorpay Secure (UPI, Cards, Wallets, NetBanking)</label></td>
                                         </tr>
                                         <tr class="border-bottom">
-                                            <td class="border-0"><input type="radio" id="cod" name="payment" class="mr-2" value="cod" >
-                                                <label for="cod">Cash on Delivery</label></td>
+                                            <td class="border-0 flex-align"><input type="radio" id="cod" name="payment" class="mr-2" value="cash" (change)="paymentMethod('cash')">
+                                                <label class="m-0" for="cod">Cash on Delivery</label></td>
                                         </tr>
                                     </tbody>
                             </table>
 
                         </div>
-                        <!-- <div class="text-left mb-4">
-                            <div>Billing address</div>
-                            <label>Select the address that matches your card or payment method.</label>
-                        </div> -->
-                        <!-- <div class="shipping_details mb-4" style="text-align: initial;">
-                            <table class="table mb-3">
-                                    <tbody>
-                                        <tr class="border-bottom">
-                                            <td class="border-0"><input type="radio" id="same" name="billAddress" class="mr-2" value="cashFree" checked>
-                                            <label for="same">
-                                                Same as shipping address
-                                            </label></td>
-                                        </tr>
-                                        <tr class="border-bottom">
-                                            <td class="border-0"><input type="radio" name="billAddress" id="different" class="mr-2" value="razorPay" >
-                                                <label for="different">
-                                                    Use a different billing address
-                                                </label></td>
-                                        </tr>
-                                    </tbody>
-                            </table>
-
-                        </div> -->
                         <div class="flex-custom mb-4">
                             <div class="mb-2 mr-auto">
                                 <button class="btn btn-secondary mr-2"  (click)="paymentPage=false" >Return to Shipping</button>
@@ -295,7 +281,7 @@
                         </tr>
                         <tr class="">
                             <td class="text-left">Total</td>
-                            <td class="text-right">{{couponCode?totalAmt:subTotalAmt | currency:'INR'}}</td>
+                            <td class="text-right">{{couponCode ? totalAmt : subTotalAmt | currency:'INR'}}</td>
                         </tr>
                     </tbody>
                 </table>
