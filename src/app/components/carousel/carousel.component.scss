@@ -13,9 +13,6 @@
 .carousel-indicators{
     bottom: 20%;
 }
-.carousel-control-prev {
-    // bottom: 30%;
-}
-.carousel-control-next {
-    // bottom: 30%;
+.carousel-control-prev, .carousel-control-next {
+    top: 100px;
 }

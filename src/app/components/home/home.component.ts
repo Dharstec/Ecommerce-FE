@@ -59,6 +59,17 @@ export class HomeComponent implements OnInit {
     this.listByColour=this.util.unique(this.listByColour,['colour'])
     this.listByCategory=this.util.unique(this.listByCategory,['category'])
   }
+
+  getSelectedCollection(row){
+    return this.router.navigate(['/jewel/product-collections'],{state : {row}})
+  }
+  routeToDetails(data?:any){
+    let productName=data.productName.replace(/\s/g,'-')
+    let url=`/jewel/product-collections/details/${productName}`
+    return this.router.navigate([url],{state : {data}})
+
+    // return this.router.navigate([url],{queryParams:{productDetails:{...data}},  skipLocationChange: true})
+}
   
 
 }

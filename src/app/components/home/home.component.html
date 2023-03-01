@@ -12,7 +12,7 @@
     <div class="flex-custom overflow-auto w-100 mb-4 p-2" style="background-color: #f8f8f8;">
      
       <div class="accordion ml-auto mr-auto" *ngFor="let row of listByCategory;let i=index">
-        <div class="flex-grid cursor-pointer" >
+        <div class="flex-grid cursor-pointer" (click)="getSelectedCollection(row)" >
            <img class="accordion_img cat_img" [src]="row?.data?.productImage" alt="">
            <label class="product-name mt-1" style="width: 165px;">{{row?.category | titlecase}}</label>
            <div class="product-price">
@@ -26,7 +26,7 @@
      <h3 class="text-center font-weight-bolder"><img class="heart" src="assets/homeImg/heart-64.png">Most Gifted<img class="heart" src="assets/homeImg/heart-64.png"></h3>
      <div class="flex-custom overflow-auto w-100 mb-4 p-2">
       <div class="accordion" *ngFor="let row of giftProducts;let i=index">
-        <div class="flex-grid cursor-pointer" >
+        <div class="flex-grid cursor-pointer" (click)="routeToDetails(row)">
            <img class="accordion_img gift_img" [src]="row?.productImage" alt="">
            <label class="product-name mt-1" style="width: 320px;">{{row?.productName | titlecase}}</label>
            <div class="product-price">
@@ -41,7 +41,7 @@
      <h3 class="text-center font-weight-bolder"><img class="heart" src="assets/homeImg/heart-64.png">Shop By Colour<img class="heart" src="assets/homeImg/heart-64.png"></h3>
      <div class="flex-custom overflow-auto w-100 mb-4 p-2">
       <div class="accordion ml-auto mr-auto" *ngFor="let row of listByColour;let i=index">
-        <div class="flex-grid cursor-pointer" >
+        <div class="flex-grid cursor-pointer mr-2" (click)="getSelectedCollection(row)" >
            <img class="accordion_img colr_img" [src]="row?.data?.productImage" alt="">
            <label class="product-name mt-1">{{row?.colour | titlecase}}</label>
            <div class="product-price">
@@ -55,7 +55,7 @@
      <h3 class="text-center font-weight-bolder"><img class="heart" src="assets/homeImg/heart-64.png">Essentials For You<img class="heart" src="assets/homeImg/heart-64.png"></h3>
      <div class="flex-custom overflow-auto w-100 mb-4 p-2">
       <div class="accordion ml-auto mr-auto" *ngFor="let row of listByStyle;let i=index">
-        <div class="flex-grid cursor-pointer ml-12 mr-12" >
+        <div class="flex-grid cursor-pointer ml-12 mr-12" (click)="getSelectedCollection(row)">
            <img class="accordion_img" style="border-radius: 50%;width: 300px;height: 320px;border: none" [src]="row?.data?.productImage" alt="">
            <label class="product-name w-100 mt-1">{{row?.style | titlecase}} Wear</label>
            <div class="product-price">
