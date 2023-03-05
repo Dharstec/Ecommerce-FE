@@ -22,8 +22,8 @@ export class LoginSecurityComponent implements OnInit {
    ngOnInit(): void {
     this.currentDate = new Date().toISOString().slice(0, 10);
     let body={
-      "email":'aravindaravi58@gmail.com',
-      "password":'test@123'
+      "email": sessionStorage.getItem('user_name'),
+      "password":sessionStorage.getItem('user_pw')
     }
     this.api.postCall('Customer/loginCustomer',body).subscribe(async (data:any)=>{
       this.currentUserData=data
