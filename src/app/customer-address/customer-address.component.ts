@@ -170,7 +170,7 @@ export class CustomerAddressComponent implements OnInit {
     })
   })
   console.log('body',body);
-  
+  form.addressType!='exist' ? this.updateCustomer() :false
     this.api.postCall('Order/createOrder',body).subscribe(async(res:any)=>{
       console.log("response for purchase ",res);
       // let payload = res.payload;
@@ -185,13 +185,13 @@ export class CustomerAddressComponent implements OnInit {
         let snackBarRef = this.snackBar.open(res.message,'Close',{
           duration:5000
         });
+        this.router.navigate(['/jewel/order-details'])
         console.log('order created successful',res);
       }else{
         let snackBarRef = this.snackBar.open(res.message,'Close',{
           duration:5000
         });
       }
-       form.addressType!='exist' ? await this.updateCustomer() :false
 
 
       

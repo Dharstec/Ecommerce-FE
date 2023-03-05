@@ -62,10 +62,10 @@
        
         <div class="nav-bar-icons flex-custom">
           <span><img class="nav-icon" (click)="toggleSearchBar()" src="assets/search.svg" alt=""></span>
-          <span class="dropdown"><img class="nav-icon"  src="assets/profile.svg" alt="">
-            <div class="dropdown-content" *ngIf="!userLogin" style="right:0;top:24px;left:auto;">
+          <span class="dropdown" (click)="loginPage()"><img class="nav-icon"  src="assets/profile.svg" alt="">
+            <!-- <div class="dropdown-content" *ngIf="!userLogin" style="right:0;top:24px;left:auto;">
               <a (click)="loginPage()"><img class="d-arrow mr-12" src="assets/login/login.svg" alt="">Log in</a>
-            </div>
+            </div> -->
             <div class="dropdown-content login_drp" *ngIf="userLogin" >
               <a (click)="route('ls')" ><img class="d-arrow mr-12" src="assets/login/security.svg" alt="">Login & Security</a>
               <a (click)="route('od')" ><img class="d-arrow mr-12" src="assets/login/order.svg" alt="">Your Orders</a>

@@ -40,6 +40,8 @@ export class NavBarComponent implements OnInit {
         this.cartListCount=res.addCartlistCount ? res.addCartlistCount.length : 0
         this.userLogin=true
       }else{
+        localStorage.clear()
+        sessionStorage.clear()
         this.userLogin=false
         this.wishListCount=res.addWishlistCount ? res.addWishlistCount.length : 0
         this.cartListCount=res.addCartlistCount ? res.addCartlistCount.length : 0

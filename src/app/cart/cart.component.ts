@@ -62,7 +62,7 @@ export class CartComponent implements OnInit {
   itemPlus(row){
     let val=row.get('value').value
     let data=row.get('data').value
-    val +=1
+    val == data.stock ?  val = val : val +=1 
     this.setQuantity(val,data,'click')
   }
   itemMinus(row){

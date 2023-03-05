@@ -38,6 +38,7 @@
             <div class="form-name mb-2">
                 <label>Password</label>
                 <input formControlName="passcode" placeholder="" autocomplete="off" class="form-control" type="password" id="password">  
+                <p>Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters.</p>
             </div>
             <div class="alert alert-danger" role="alert"  *ngIf="showErrorMsg">
                Email Id is already exist!
@@ -53,6 +54,9 @@
                     <label>OTP Number</label>
                     <input formControlName="otp" placeholder="" autocomplete="off" class="form-control" type="text" id="otp">  
                 </div>
+                <div class="alert alert-danger" role="alert"  *ngIf="showErrorMsg">
+                    Invalid OTP!
+                 </div>
                 <div class="mb-2">
                     <button class="btn btn-secondary" [class.disabled]="!registerForm.get('otp').value" (click)="otpVerification()">Verify</button>
                 </div>

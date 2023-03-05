@@ -39,7 +39,7 @@ export class ProductDetailsComponent implements OnInit {
     let userData = this.util.getObservable().subscribe((res) => {
       if(res.currentUserData && res.currentUserData){
         this.currentUserData = res.currentUserData
-        this.currentUserData.productsViewed['productId'].push(this.currentProductDetails.productId)
+        // this.currentUserData.productsViewed['productId'].push(this.currentProductDetails.productId)
         this.wishList=res.addWishlistCount ? res.addWishlistCount : []
         this.cartList=res.addCartlistCount ? res.addCartlistCount : []
         this.wishList.forEach(e=>{
@@ -55,7 +55,7 @@ export class ProductDetailsComponent implements OnInit {
   
     });
 
-    // await this.getAllProduct()
+    await this.getAllProduct()
     // $('.product-details').animate({scrollTop:0});
   }
   subMenuOpen(id){
@@ -126,7 +126,21 @@ export class ProductDetailsComponent implements OnInit {
   async addWishlist(){
     // this.addToWishlist=!this.addToWishlist
     if(this.currentUserData){
-      this.wishList=this.currentUserData.data.wishlistProductIdDetails || []
+      this.currentUserData.data.wishlistProductIdDetails.forEach(ele=>{
+        if(ele.data){
+          this.wishList=this.currentUserData.data.wishlistProductIdDetails || []
+        }else{
+          this.wishList=[]
+          let val =this.productList.filter(x=>this.currentUserData.data.wishlistProductIdDetails.some(y=>y==x._id))
+          val.map(e=>{
+            this.wishList.push({
+              "_id":  e._id,
+              "data": e,
+            })  
+          })
+        }
+      })
+    
 
       this.wishList.push({
           "_id":   this.currentProductDetails._id,

@@ -23,7 +23,7 @@
      </div>
     </div>
      <!-- gift -->
-     <h3 class="text-center font-weight-bolder"><img class="heart" src="assets/homeImg/heart-64.png">Most Gifted<img class="heart" src="assets/homeImg/heart-64.png"></h3>
+     <h3 class="text-center font-weight-bolder"><img class="heart" src="assets/homeImg/heart-64.png">Top Picks For you<img class="heart" src="assets/homeImg/heart-64.png"></h3>
      <div class="flex-custom overflow-auto w-100 mb-4 p-2">
       <div class="accordion" *ngFor="let row of giftProducts;let i=index">
         <div class="flex-grid cursor-pointer" (click)="routeToDetails(row)">
@@ -41,9 +41,9 @@
      <h3 class="text-center font-weight-bolder"><img class="heart" src="assets/homeImg/heart-64.png">Shop By Colour<img class="heart" src="assets/homeImg/heart-64.png"></h3>
      <div class="flex-custom overflow-auto w-100 mb-4 p-2">
       <div class="accordion ml-auto mr-auto" *ngFor="let row of listByColour;let i=index">
-        <div class="flex-grid cursor-pointer mr-2" (click)="getSelectedCollection(row)" >
-           <img class="accordion_img colr_img" [src]="row?.data?.productImage" alt="">
-           <label class="product-name mt-1">{{row?.colour | titlecase}}</label>
+        <div class="flex-grid cursor-pointer" (click)="getSelectedCollection(row)" >
+           <img class="accordion_img colr_img border-0" [src]="row?.img" alt="">
+           <label class="product-name mt-1" style="width: auto;">{{row?.colour | titlecase}}</label>
            <div class="product-price">
             <!-- <label class="mr-12">{{row?.discountPrice | currency:'INR'}}</label> -->
             <!-- <s class="grey-text">{{row?.actualPrice | currency:'INR'}}</s> -->
@@ -56,7 +56,7 @@
      <div class="flex-custom overflow-auto w-100 mb-4 p-2">
       <div class="accordion ml-auto mr-auto" *ngFor="let row of listByStyle;let i=index">
         <div class="flex-grid cursor-pointer ml-12 mr-12" (click)="getSelectedCollection(row)">
-           <img class="accordion_img" style="border-radius: 50%;width: 300px;height: 320px;border: none" [src]="row?.data?.productImage" alt="">
+           <img class="accordion_img circle_img" [src]="row?.img" alt="">
            <label class="product-name w-100 mt-1">{{row?.style | titlecase}} Wear</label>
            <div class="product-price">
             <!-- <label class="mr-12">{{row?.discountPrice | currency:'INR'}}</label> -->

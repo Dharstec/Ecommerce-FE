@@ -1,6 +1,6 @@
 .carousel{
     // position: relative;
-    margin-top: 125px;
+    margin-top: 150px;
     position:inherit;
 }
 .carousel-inner{
@@ -8,11 +8,11 @@
 }
 .carousel-item{
     position: inherit;
-    transition: none;
+    transition: 0.3s;
 }
 .carousel-indicators{
-    bottom: 20%;
+    bottom: 25%;
 }
 .carousel-control-prev, .carousel-control-next {
-    top: 100px;
+    bottom: 30px;
 }

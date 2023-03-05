@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
       dob:[null,[Validators.required]],
       phoneNo:[null,[Validators.required,Validators.maxLength(10),Validators.pattern(this.numberRegEx)]],
       emailId:[null,[Validators.required,Validators.email]],
-      passcode:[null,[Validators.required]],
+      passcode:[null,[Validators.required],Validators.pattern('(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}')],
       otp:[null],
     })
   }
