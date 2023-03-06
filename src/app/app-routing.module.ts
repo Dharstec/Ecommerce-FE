@@ -15,6 +15,7 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
 import { ProductCollectionsComponent } from './product-collections/product-collections/product-collections.component';
 import { ProductDetailsComponent } from './product-collections/product-details/product-details.component';
 import { ProductPersonalisedComponent } from './product-personalised/product-personalised.component';
+import { YourAddressPageComponent } from './your-address-page/your-address-page.component';
 
 
 const routes: Routes = [
@@ -35,6 +36,7 @@ const routes: Routes = [
      { path: 'login-security', component: LoginSecurityComponent, data: { title: 'Login-Security'}},
      { path: 'order-details', component: OrderDetailsComponent, data: { title: 'Your-orders'}},
      { path: 'customer-address', component: CustomerAddressComponent, data: { title: 'Address'}},
+     { path: 'your-addresses', component: YourAddressPageComponent, data: { title: 'Your Address'}},
    ]},
   { path: '**', component: NavBarComponent }
 ];

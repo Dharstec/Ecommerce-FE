@@ -174,6 +174,9 @@ export class CustomerAddressComponent implements OnInit {
     this.api.postCall('Order/createOrder',body).subscribe(async(res:any)=>{
       console.log("response for purchase ",res);
       // let payload = res.payload;
+      if(form.paymentType!='razorPay'){
+        return this.router.navigate(['/jewel/order-details'])
+      }
       if(res && res.data._id && this.totalAmt && form.paymentType=='razorPay'){
         this.razorPayOptions.key ='rzp_test_12TPBZPyRN4lxg';
         // this.razorPayOptions.order_id = res["data"]["_id"];
@@ -187,7 +190,8 @@ export class CustomerAddressComponent implements OnInit {
         });
         this.router.navigate(['/jewel/order-details'])
         console.log('order created successful',res);
-      }else{
+      }
+      else{
         let snackBarRef = this.snackBar.open(res.message,'Close',{
           duration:5000
         });

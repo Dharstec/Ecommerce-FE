@@ -32,6 +32,7 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
 import { CustomerAddressComponent } from './customer-address/customer-address.component';
 import { AddWishlistComponent } from './add-wishlist/add-wishlist.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
+import { YourAddressPageComponent } from './your-address-page/your-address-page.component';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { CarouselComponent } from './components/carousel/carousel.component';
     OrderDetailsComponent,
     CustomerAddressComponent,
     AddWishlistComponent,
-    CarouselComponent
+    CarouselComponent,
+    YourAddressPageComponent
   ],
   imports: [
     AppRoutingModule,

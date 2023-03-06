@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { UtilService } from '../services/util.service';
 import * as _ from 'lodash';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-order-details',
@@ -23,7 +24,8 @@ export class OrderDetailsComponent implements OnInit {
   ]
   cartListData: any=[];
 
-  constructor(private api:ApiService,private router:Router,private util:UtilService, private snackBar:MatSnackBar) { }
+  constructor(private api:ApiService,private router:Router,private util:UtilService, private snackBar:MatSnackBar
+    ,private spinner:NgxSpinnerService) { }
 
   ngOnInit(): void {
    
@@ -59,11 +61,12 @@ export class OrderDetailsComponent implements OnInit {
 
 getOrderList(){
   // console.log(this.currentUserData)
- 
+   this.spinner.show()
   return this.api.getCall('Order/getAllOrder').subscribe(async data=>{
     let user_id=sessionStorage.getItem('user_id')
     this.orderList=data.data.filter(e=>e.orderedBy!=null ? e.orderedBy._id==user_id :false)
     console.log('hhhhhhhhhhh',this.orderList)
+    this.spinner.hide()
   },err=>{
     console.log('error in get all order list',err)
   })

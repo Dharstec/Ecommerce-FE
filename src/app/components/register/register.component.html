@@ -35,16 +35,17 @@
                 <label>Email ID</label>
                 <input formControlName="emailId" placeholder="" autocomplete="off" class="form-control" type="email" id="email-id">  
             </div>
+            <div class="alert alert-danger" role="alert"  *ngIf="showErrorMsg">
+                Email Id is already exist!
+             </div>
             <div class="form-name mb-2">
                 <label>Password</label>
                 <input formControlName="passcode" placeholder="" autocomplete="off" class="form-control" type="password" id="password">  
                 <p>Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters.</p>
             </div>
-            <div class="alert alert-danger" role="alert"  *ngIf="showErrorMsg">
-               Email Id is already exist!
-            </div>
+           
             <div class="mb-2">
-                <button class="btn btn-secondary mr-2" *ngIf="!showResendOtp" [class.disabled]="registerForm.invalid" (click)="newRegister()">Create</button>
+                <button class="btn btn-secondary mr-2" *ngIf="!showResendOtp" [class.disabled]="registerForm.invalid || showErrorMsg" (click)="newRegister()">Create</button>
                 <button class="btn btn-secondary" *ngIf="showResendOtp" (click)="resendOtp()">Resend OTP</button>
             </div>
         </ng-container>

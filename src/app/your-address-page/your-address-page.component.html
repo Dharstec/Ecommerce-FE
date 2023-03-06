@@ -1,0 +1,17 @@
+<div class="main-content">
+    <div class="row_item">
+        <div class="item_border"  *ngFor="let data of userData.address; index as i">
+            <label class=" flex-custom font-weight-bold">xxxxx</label>
+            <label class="flex-custom">{{data.doorNoAndStreet}},</label>
+            <label class="flex-custom">{{data.city}}-{{data.pincode}},</label>
+            <label class="flex-custom">{{data.state}},</label>
+            <label class="flex-custom mb-3">{{data.country}}</label>
+
+            <div class="flex-custom">
+                <label class="blue-text">Edit</label> | <label class="blue-text">Delete</label> | <label class="blue-text">Set as default</label> 
+            </div>
+        </div>
+    </div>
+
+
+</div>

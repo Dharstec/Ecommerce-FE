@@ -100,7 +100,7 @@ export class NavBarComponent implements OnInit {
     switch (type){
       case 'ls':  return this.router.navigate(['/jewel/login-security']) 
       case 'od':  return this.router.navigate(['/jewel/order-details']) 
-      case 'ca':  return this.router.navigate(['/jewel/customer-address']) 
+      case 'ca':  return this.router.navigate(['/jewel/your-addresses']) 
     }
   
   }

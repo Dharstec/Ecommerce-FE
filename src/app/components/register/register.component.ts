@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
+import { ValidatorService } from 'src/app/services/validator.service';
 
 @Component({
   selector: 'app-register',
@@ -15,13 +16,14 @@ export class RegisterComponent implements OnInit {
   passcode:any
   registerForm: any;
   numberRegEx = /\-?\d*\.?\d{1,2}/;
+  passwordRegEx = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/
   loginStatus: Object;
   showVerifyOtp: boolean=false;
   currentDate:any;
   showErrorMsg: boolean;
   showSuccessMsg: boolean=false;
   showResendOtp: boolean;
-  constructor(private formBuilder: FormBuilder,private api:ApiService,private router:Router) { }
+  constructor(private formBuilder: FormBuilder,private api:ApiService,private router:Router,private validatorService : ValidatorService) { }
 
   ngOnInit(): void {
     this.currentDate = new Date().toISOString().slice(0, 10);
@@ -32,7 +34,11 @@ export class RegisterComponent implements OnInit {
       dob:[null,[Validators.required]],
       phoneNo:[null,[Validators.required,Validators.maxLength(10),Validators.pattern(this.numberRegEx)]],
       emailId:[null,[Validators.required,Validators.email]],
-      passcode:[null,[Validators.required],Validators.pattern('(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}')],
+      passcode:[null,[
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(this.passwordRegEx)
+    ]],
       otp:[null],
     })
   }
