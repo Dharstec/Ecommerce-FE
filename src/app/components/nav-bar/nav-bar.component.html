@@ -1,6 +1,6 @@
 <div class="header-container">
     <div class="offer-header">
-      <span class="offer-inline pt-2">FLAT 20% OFF above 6999. Code GIFTS20</span>
+      <span class="offer-inline pt-2" id="couponText">{{getCouponText()}}</span>
     </div>
     <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -9,7 +9,7 @@
       </nav> -->
     <div class="flex-custom">
       <nav class="nav-bar nav-font btm-line">
-        <img class="logo mr-12" routerLink="/jewel/home" (click)="activeNavBar=''"  src="assets/ring-logo.webp" alt="">
+        <img class="logo mr-12 ml-12" routerLink="/jewel/home" (click)="activeNavBar=''"  src="assets/logo/aura.png" alt="">
         <span class="nav-content dropdown ml-auto" id="all">All<img class="d-arrow" src="assets/down-arrow.svg" alt="">
            <div class="dropdown-content p-4" style="width: 640px;">
             <div class="flex-custom">

@@ -33,6 +33,7 @@ import { CustomerAddressComponent } from './customer-address/customer-address.co
 import { AddWishlistComponent } from './add-wishlist/add-wishlist.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { YourAddressPageComponent } from './your-address-page/your-address-page.component';
+import { RemoveAddressPopupComponent } from './your-address-page/remove-address-popup/remove-address-popup.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { YourAddressPageComponent } from './your-address-page/your-address-page.
     CustomerAddressComponent,
     AddWishlistComponent,
     CarouselComponent,
-    YourAddressPageComponent
+    YourAddressPageComponent,
+    RemoveAddressPopupComponent
   ],
   imports: [
     AppRoutingModule,

@@ -6,7 +6,6 @@ import { Options } from '@angular-slider/ngx-slider';
 import { FormBuilder,FormArray, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { UtilService} from 'src/app/services/util.service';
 import * as $ from 'jquery';
-import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 
@@ -53,7 +52,7 @@ export class ProductCollectionsComponent implements OnInit {
    @HostListener('window:scroll', ['$event'])
    handleScroll(){
        const windowScroll = window.pageYOffset;
-       if(windowScroll >= (this.elementPosition-70)){
+       if(windowScroll >= (this.elementPosition-140)){
            this.sticky = true;
        } else {
            this.sticky = false;
@@ -473,11 +472,11 @@ export class ProductCollectionsComponent implements OnInit {
   subMenuOpen(id){
     let idList=[{id:'category'},{id:'stone'},{id:'price'},{id:'colour'},{id:'style'},{id:'for'},{id:'sortBy'}]
       $('#' + id).toggleClass('open').siblings().slideToggle(300); 
-      // if(this.prevId!=id)  $('#' + this.prevId).toggleClass('open').siblings().slideUp(300)  
-      // if(this.prevId==id){
-      //   // $('#' + id).toggleClass('open')
-      //   $('#' + this.prevId).toggleClass('open')
-      // }  
+      if(this.prevId!=id)  $('#' + this.prevId).toggleClass('open').siblings().slideUp(300)  
+      if(this.prevId==id){
+        // $('#' + id).toggleClass('open')
+        $('#' + this.prevId).toggleClass('open')
+      }  
     this.prevId=id
   }
 

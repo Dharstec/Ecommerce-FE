@@ -28,11 +28,13 @@ export class NavBarComponent implements OnInit {
   forDropdownList: any;
   sortByDropdownList: any;
   userData: any;
+  allcouponsList: any;
   
   constructor(private api:ApiService,private router:Router,private util:UtilService,private changeDetectorRefs: ChangeDetectorRef,private zone:NgZone) {
    }
 
   ngOnInit(): void {
+    this.getCouponsCode()
     this.userData = this.util.getObservable().subscribe((res) => {
       if(res.currentUserData && res.currentUserData.data){
         let data = res.currentUserData.data
@@ -105,6 +107,34 @@ export class NavBarComponent implements OnInit {
   
   }
 
+  getCouponsCode(){
+    this.api.getCall('Coupon/getCoupon').subscribe((res:any)=>{
+      res.data.map(e=>{
+        e['active']=false
+      })
+      this.allcouponsList=res.data
+      console.log('Coupons get',res);
+      
+    }, err=>{
+      console.log("error in get coupon code",err);
+    })
+  }
+
+  getCouponText(){
+
+      // setTimeout(() => {
+      //   if(this.allcouponsList.length==0) return this.allcouponsList[0].description
+      //   else{
+      //     this.allcouponsList.forEach((e,i)=>{
+      //       console.log('coupon nav bar',this.allcouponsList[i].description)
+      //       return this.allcouponsList[i].description
+      //   }, 15000);
+      //   }
+      //   })
+        
+        
+      return this.allcouponsList[0].description
+  }
   logOut(){
        this.util.setObservable('currentUserData',null)
        this.util.setObservable('addWishlistCount',null)
